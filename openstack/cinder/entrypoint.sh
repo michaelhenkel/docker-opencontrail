@@ -1,46 +1,30 @@
 #!/bin/bash
-
-if [ -n "$HOST_IP" ]; then
-    echo "my_ip = $HOST_IP" >> /etc/nova/nova.conf
-fi
-if [ -n "$VNC_PROXY" ]; then
-    echo "vncserver_listen = $VNC_PROXY" >> /etc/nova/nova.conf
-    echo "vncserver_proxyclient_address = $VNC_PROXY" >> /etc/nova/nova.conf
-fi
-if [ -n "$KEYSTONE_SERVER" ]; then
-    echo "auth_strategy = keystone" >> /etc/nova/nova.conf
-fi
-if [ -n "$RABBIT_SERVER" ]; then
-    echo "rpc_backend = rabbit" >> /etc/nova/nova.conf
-fi
-if [ -n "$HOST_IP" ]; then
-    echo "my_ip = $HOST_IP" >> /etc/nova/nova.conf
-fi
-if [ -n "$KEYSTONE_SERVER" ]; then
-    echo "[keystone_authtoken]" >> /etc/nova/nova.conf
-    echo "auth_uri = http://$KEYSTONE_SERVER:5000" >> /etc/nova/nova.conf
-    echo "auth_url = http://$KEYSTONE_SERVER:35357" >> /etc/nova/nova.conf
-    echo "auth_plugin = password" >> /etc/nova/nova.conf
-    echo "project_domain_id = default" >> /etc/nova/nova.conf
-    echo "user_domain_id = default" >> /etc/nova/nova.conf
-    echo "project_name = service" >> /etc/nova/nova.conf
-    echo "username = nova" >> /etc/nova/nova.conf
-    echo "password = $ADMIN_PASSWORD" >> /etc/nova/nova.conf
-fi
-if [ -n "$RABBIT_SERVER" ]; then
-    echo "[oslo_messaging_rabbit]" >> /etc/nova/nova.conf
-    echo "rabbit_host = $RABBIT_SERVER" >> /etc/nova/nova.conf
-    echo "rabbit_password = guest" >> /etc/nova/nova.conf
-fi
+./openstack-config --set /etc/cinder/cinder.conf DEFAULT my_ip $HOST_IP
+./openstack-config --set /etc/cinder/cinder.conf oslo_concurrency lock_path /var/lock/cinder
 if [ -n "$MYSQL_SERVER" ]; then
-    echo "[database]" >> /etc/nova/nova.conf
-    echo "connection = mysql://nova:$ADMIN_PASSWORD@$MYSQL_SERVER/nova" >> /etc/nova/nova.conf
+    ./openstack-config --set /etc/cinder/cinder.conf database connection mysql://cinder:$ADMIN_PASSWORD@$MYSQL_SERVER/cinder
 fi
-if [ -n "$GLANCE_SERVER" ]; then
-    echo "[glance]" >> /etc/nova/nova.conf
-    echo "host = $GLANCE_SERVER" >> /etc/nova/nova.conf
+if [ -n "$KEYSTONE_SERVER" ]; then
+    ./openstack-config --del /etc/cinder/cinder.conf keystone_authtoken identity_uri
+    ./openstack-config --del /etc/cinder/cinder.conf keystone_authtoken admin_tenant_name
+    ./openstack-config --del /etc/cinder/cinder.conf keystone_authtoken admin_user
+    ./openstack-config --del /etc/cinder/cinder.conf keystone_authtoken admin_password
+    ./openstack-config --del /etc/cinder/cinder.conf keystone_authtoken revocation_cache_time
+    ./openstack-config --set /etc/cinder/cinder.conf keystone_authtoken auth_uri http://$KEYSTONE_SERVER:5000
+    ./openstack-config --set /etc/cinder/cinder.conf keystone_authtoken auth_url http://$KEYSTONE_SERVER:35357
+    ./openstack-config --set /etc/cinder/cinder.conf keystone_authtoken auth_plugin password
+    ./openstack-config --set /etc/cinder/cinder.conf keystone_authtoken project_domain_id default
+    ./openstack-config --set /etc/cinder/cinder.conf keystone_authtoken user_domain_id default
+    ./openstack-config --set /etc/cinder/cinder.conf keystone_authtoken project_name service
+    ./openstack-config --set /etc/cinder/cinder.conf keystone_authtoken username cinder
+    ./openstack-config --set /etc/cinder/cinder.conf keystone_authtoken password $ADMIN_PASSWORD
+    ./openstack-config --set /etc/cinder/cinder.conf DEFAULT auth_strategy keystone
 fi
-echo "[oslo_concurrency]" >> /etc/nova/nova.conf
-echo "lock_path = /var/lib/nova/tmp" >> /etc/nova/nova.conf
+if [ -n "$RABBIT_SERVER" ]; then
+    ./openstack-config --set /etc/cinder/cinder.conf DEFAULT rpc_backend rabbit
+    ./openstack-config --set /etc/cinder/cinder.conf oslo_messaging_rabbit rabbit_host $RABBIT_SERVER
+    ./openstack-config --set /etc/cinder/cinder.conf oslo_messaging_rabbit rabbit_userid guest
+    ./openstack-config --set /etc/cinder/cinder.conf oslo_messaging_rabbit rabbit_password guest
+fi
 
 exec "$@"

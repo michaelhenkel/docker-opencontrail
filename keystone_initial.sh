@@ -54,12 +54,21 @@ openstack user create --password $ADMIN_PASSWORD cinder
 openstack role add --project service --user cinder admin
 openstack service create --name cinder \
   --description "OpenStack Block Storage" volume
+openstack service create --name cinderv2 \
+  --description "OpenStack Block Storage" volumev2
 openstack endpoint create \
   --publicurl http://$CINDER_SERVER:8776/v2/%\(tenant_id\)s \
   --internalurl http://$CINDER_SERVER:8776/v2/%\(tenant_id\)s \
   --adminurl http://$CINDER_SERVER:8776/v2/%\(tenant_id\)s \
   --region RegionOne \
   volume
+
+openstack endpoint create \
+  --publicurl http://$CINDER_SERVER:8776/v2/%\(tenant_id\)s \
+  --internalurl http://$CINDER_SERVER:8776/v2/%\(tenant_id\)s \
+  --adminurl http://$CINDER_SERVER:8776/v2/%\(tenant_id\)s \
+  --region RegionOne \
+  volumev2
 ######## neutron
 
 openstack user create --password $ADMIN_PASSWORD neutron
