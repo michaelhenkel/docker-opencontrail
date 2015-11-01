@@ -1,4 +1,4 @@
-docker run -d --net host --cap-add NET_ADMIN \
+docker run -d --net host \
   --env HOST_IP=10.87.64.23 \
   --env MYSQL_SERVER=host1 \
   --env NEUTRON_SERVER=host1 \
@@ -23,4 +23,4 @@ docker run -d --net host --cap-add NET_ADMIN \
   --env ADMIN_TENANT=admin \
   --env ADMIN_TOKEN=contrail123 \
   --env ADMIN_PASSWORD=contrail123 \
-  --name nova-api1 nova-api
+  --name neutron-server1 neutron-server
