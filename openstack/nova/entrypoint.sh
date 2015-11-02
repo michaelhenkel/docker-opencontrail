@@ -7,8 +7,20 @@ if [ -n "$VNC_PROXY" ]; then
     ./openstack-config --set /etc/nova/nova.conf DEFAULT vncserver_listen $VNC_PROXY
     ./openstack-config --set /etc/nova/nova.conf DEFAULT vncserver_proxyclient_address $VNC_PROXY
 fi
+if [ -n "$NEUTRON_SERVER" ]; then
+    ./openstack-config --set /etc/nova/nova.conf neutron admin_auth_url http://$KEYSTONE_SERVER:35357/v2.0
+    ./openstack-config --set /etc/nova/nova.conf neutron extension_sync_interval 600
+    ./openstack-config --set /etc/nova/nova.conf neutron admin_username neutron
+    ./openstack-config --set /etc/nova/nova.conf neutron admin_tenant_name service
+    ./openstack-config --set /etc/nova/nova.conf neutron admin_password $ADMIN_PASSWORD
+    ./openstack-config --set /etc/nova/nova.conf neutron url_timeout 30
+    ./openstack-config --set /etc/nova/nova.conf neutron default_tenant_id $ADMIN_TENANT
+    ./openstack-config --set /etc/nova/nova.conf neutron url http://$NEUTRON_SERVER:9696
+    
+fi
 if [ -n "$KEYSTONE_SERVER" ]; then
     ./openstack-config --set /etc/nova/nova.conf DEFAULT auth_strategy keystone
+    ./openstack-config --set /etc/nova/nova.conf DEFAULT network_api_class nova_contrail_vif.contrailvif.ContrailNetworkAPI
     ./openstack-config --del /etc/nova/nova.conf keystone_authtoken identity_uri
     ./openstack-config --del /etc/nova/nova.conf keystone_authtoken admin_tenant_name
     ./openstack-config --del /etc/nova/nova.conf keystone_authtoken admin_user

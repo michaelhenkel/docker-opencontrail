@@ -1,0 +1,12 @@
+OG=/var/log/contrail.log
+CONFIG=/etc/contrail/agent.conf
+prog=/usr/bin/contrail-vrouter-agent
+kmod=vrouter
+pname=contrail-vrouter-agent
+LIBDIR=/usr/lib64
+VHOST_CFG=/etc/network/interfaces
+DEVICE=vhost0
+dev=eth0
+vgw_subnet_ip=
+vgw_int=
+LOGFILE=--log-file=/var/log/contrail/vrouter.log
