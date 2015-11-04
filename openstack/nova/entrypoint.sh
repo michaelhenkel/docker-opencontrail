@@ -16,6 +16,7 @@ if [ -n "$NEUTRON_SERVER" ]; then
     ./openstack-config --set /etc/nova/nova.conf neutron url_timeout 30
     ./openstack-config --set /etc/nova/nova.conf neutron default_tenant_id $ADMIN_TENANT
     ./openstack-config --set /etc/nova/nova.conf neutron url http://$NEUTRON_SERVER:9696
+    ./openstack-config --set /etc/nova/nova.conf neutron service_metadata_proxy True
     
 fi
 if [ -n "$KEYSTONE_SERVER" ]; then
