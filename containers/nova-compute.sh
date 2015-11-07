@@ -1,4 +1,4 @@
-docker run -d --net host --cap-add NET_ADMIN \
+docker run -d --net host --privileged \
   -v /var/lib/nova/instances:/var/lib/nova/instances \
   --env HOST_IP=192.168.0.12 \
   --env MYSQL_SERVER=host1 \
