@@ -1,9 +1,0 @@
-FROM webui
-ENV DEBIAN_FRONTEND noninteractive
-WORKDIR /usr/src/contrail/contrail-web-core
-
-COPY entrypoint.sh /
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["/usr/bin/nodejs","webServerStart.js"]

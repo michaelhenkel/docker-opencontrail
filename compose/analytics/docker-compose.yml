@@ -1,0 +1,24 @@
+analytics-alarm:
+  image: localhost:5100/analytics-alarm:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+analytics-api:
+  image: localhost:5100/analytics-api:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+analytics-collector:
+  image: localhost:5100/analytics-collector:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+analytics-query:
+  image: localhost:5100/analytics-query:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+analytics-snmp:
+  image: localhost:5100/analytics-snmp:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+analytics-topology:
+  image: localhost:5100/analytics-topology:contrail-3.0-2668
+  net: host
+  env_file: ./common.env

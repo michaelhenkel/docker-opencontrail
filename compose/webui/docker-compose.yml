@@ -1,0 +1,8 @@
+webui-job:
+  image: localhost:5100/webui-job:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+webui-server:
+  image: localhost:5100/webui-server:contrail-3.0-2668
+  net: host
+  env_file: ./common.env

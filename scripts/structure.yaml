@@ -1,0 +1,33 @@
+version: contrail-3.0-2668
+containers:
+ analytics:
+   - alarm
+   - api
+   - collector
+   - query
+   - snmp
+   - topology
+ config:
+   - api
+   - device-manager
+   - discovery
+   - schema
+   - svc-monitor
+ control:
+   - control
+   - dns
+   - named
+ ifmap:
+ vrouter-agent:
+ nova:
+   - api
+   - cert
+   - compute
+   - conductor
+   - consoleauth
+   - novncproxy
+   - scheduler
+ webui:
+   - job
+   - server
+ neutron-server:

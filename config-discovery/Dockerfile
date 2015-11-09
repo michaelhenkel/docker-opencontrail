@@ -1,8 +1,0 @@
-FROM config
-ENV DEBIAN_FRONTEND noninteractive
-
-COPY entrypoint.sh /
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["/usr/bin/python","/usr/bin/contrail-discovery","--conf_file","/etc/contrail/contrail-discovery.conf","--worker_id","0"]

@@ -1,0 +1,47 @@
+for i in ../contrail/analytics-alarm/Dockerfile \
+../contrail/analytics-api/Dockerfile \
+../contrail/analytics-collector/Dockerfile \
+../contrail/analytics-query/Dockerfile \
+../contrail/analytics-snmp/Dockerfile \
+../contrail/analytics-topology/Dockerfile 
+do
+  echo "LABEL net.juniper.contrail=analytics" >> $i
+  echo "LABEL net.juniper.node=controller" >> $i
+done
+for i in ../contrail/config-api/Dockerfile \
+../contrail/config-device-manager/Dockerfile \
+../contrail/config-discovery/Dockerfile \
+../contrail/config-schema/Dockerfile \
+../contrail/config-svc-monitor/Dockerfile
+do 
+  echo "LABEL net.juniper.contrail=config" >> $i
+  echo "LABEL net.juniper.node=controller" >> $i
+done
+for i in ../contrail/control-control/Dockerfile \
+../contrail/control-dns/Dockerfile \
+../contrail/control-named/Dockerfile
+do
+  echo "LABEL net.juniper.contrail=control" >> $i
+  echo "LABEL net.juniper.node=controller" >> $i
+done
+for i in ../contrail/nova-api/Dockerfile \
+../contrail/nova-cert/Dockerfile \
+../contrail/nova-conductor/Dockerfile \
+../contrail/nova-consoleauth/Dockerfile \
+../contrail/nova-novncproxy/Dockerfile \
+../contrail/nova-scheduler/Dockerfile 
+do
+  echo "LABEL net.juniper.openstack=nova" >> $i
+  echo "LABEL net.juniper.node=controller" >> $i
+done
+for i in ../contrail/webui-job/Dockerfile \
+../contrail/webui-server/Dockerfile 
+do
+  echo "LABEL net.juniper.contrail=webui" >> $i
+  echo "LABEL net.juniper.node=controller" >> $i
+done
+for i in ../contrail/nova-compute/Dockerfile
+do
+  echo "LABEL net.juniper.openstack=nova" >> $i
+  echo "LABEL net.juniper.node=compute" >> $i
+done

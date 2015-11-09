@@ -1,0 +1,14 @@
+control-control:
+  image: localhost:5100/control-control:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+control-dns:
+  cap_add:
+    - ALL
+  image: localhost:5100/control-dns:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+control-named:
+  image: localhost:5100/control-named:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
