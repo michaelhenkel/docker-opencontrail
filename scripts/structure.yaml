@@ -17,8 +17,6 @@ containers:
    - control
    - dns
    - named
- ifmap:
- vrouter-agent:
  nova:
    - api
    - cert
@@ -30,4 +28,11 @@ containers:
  webui:
    - job
    - server
+ ifmap:
+ cassandra:
+ zookeeper:
+ memcached:
+ rabbitmq:
+ keystone:
+ vrouter-agent:
  neutron-server:
