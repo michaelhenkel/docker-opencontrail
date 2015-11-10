@@ -354,14 +354,14 @@ This list also includes container images not needed for OpenContrail (mariadb, h
 # Runtime configuration and start of a container/service
 
 Each container uses an entrypoint.sh shell script which  
-configures the container application at the time the 
+configures the container application at the time the  
 container is started. This works by passing environment  
 variables to the docker command which will be evaluated  
 by the script. The following script creates a nova.conf  
 file. As all nova services use the same nova.conf file  
 the entrypoint script is injected into the base nova image.  
 If a per subcontainer configuration is needed the  
-entrypoint.sh script will be injected into the subcontainer.
+entrypoint.sh script will be injected into the subcontainer. 
 Variables like $HOST_IP, $KEYSTONE_SERVER etc. must be  
 passed to the docker run command.
 
