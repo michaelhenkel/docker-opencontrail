@@ -551,9 +551,9 @@ In order to build a compute node the following steps are
 required:
 
 1. update repo
-```
-yum -y update
-```
+   ```
+   yum -y update
+   ```
 
 2. install docker
 ```
