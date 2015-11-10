@@ -230,55 +230,71 @@ container directories. In this example a private repository is used
 for easy distribution of container images:
 
 ```
-root@5b3s18:~/Dockerfiles/contrail/libvirt# docker build -t localhost:5100/libvirt:contrail-3.0-2668 .
+root:~/Dockerfiles/contrail/libvirt# docker build -t \
+> localhost:5100/libvirt:contrail-3.0-2668 .
 Sending build context to Docker daemon 6.656 kB
-Step 1 : FROM muccg/openstackbase:kilo
-# Executing 2 build triggers...
-Step 1 : RUN netstat -nr | grep '^0\.0\.0\.0' | awk '{print $2}' > ${BUILD_HOST_FILE}
- ---> Using cache
-Step 1 : RUN echo "HEAD /" | nc -q -1 -n -v  `cat ${BUILD_HOST_FILE}` 3128 | grep squid-deb-proxy   && (echo "Acquire::http::Proxy \"http://$(cat ${BUILD_HOST_FILE}):3128\";" > ${APT_PROXY_CONF})   && (echo "Acquire::http::Proxy::ppa.launchpad.net DIRECT;" >> ${APT_PROXY_CONF})   || echo "No squid-deb-proxy detected on docker host"
- ---> Using cache
- ---> 58ff651fabe2
+Step 1 : FROM ubuntu:14.04
+ ---> 0a17decee413
 Step 2 : MAINTAINER https://github.com/muccg/
  ---> Using cache
- ---> 2255b1b673b6
+ ---> 14617fcf3369
 Step 3 : RUN apt-get -qqy update && apt-get install -y --no-install-recommends   libvirt-bin   libvirt0   python-libvirt   qemu-kvm   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ ---> Running in 165aa3053496
+^Croot@5b3s18:~/Dockerfiles/contrail/libvirtvi Dockerfile
+root@5b3s18:~/Dockerfiles/contrail/libvirt# docker build -t localhost:5100/libvirt:contrail-3.0-2668 .
+Sending build context to Docker daemon 6.656 kB
+Step 1 : FROM ubuntu:14.04
+ ---> 0a17decee413
+Step 2 : MAINTAINER mhenkel@juniper.net
  ---> Using cache
- ---> a4fd5036bf67
-Step 4 : COPY openstack-config /
- ---> Using cache
- ---> 2d30ba40c12c
-Step 5 : COPY entrypoint.sh /
- ---> Using cache
- ---> 04778cadaa00
-Step 6 : ENTRYPOINT /entrypoint.sh
- ---> Using cache
- ---> bd561d19da58
-Step 7 : RUN echo "listen_tls = 0" >> /etc/libvirt/libvirtd.conf; echo 'listen_tcp = 1' >> /etc/libvirt/libvirtd.conf; echo 'tls_port = "16514"' >> /etc/libvirt/libvirtd.conf; echo 'tcp_port = "16509"' >> /etc/libvirt/libvirtd.conf; echo 'auth_tcp = "none"' >> /etc/libvirt/libvirtd.conf
- ---> Using cache
- ---> 81e07ef8ff39
-Step 8 : RUN mkdir -p /var/lib/libvirt/images/
- ---> Using cache
- ---> 2401a1aef446
-Step 9 : VOLUME /sys/fs/cgroup
- ---> Using cache
- ---> c03e538bebb0
-Step 10 : RUN echo 'clear_emulator_capabilities = 0' >> /etc/libvirt/qemu.conf; echo 'user = "root"' >> /etc/libvirt/qemu.conf; echo 'group = "root"' >> /etc/libvirt/qemu.conf; echo 'cgroup_device_acl = [' >> /etc/libvirt/qemu.conf; echo '        "/dev/null", "/dev/full", "/dev/zero",'>> /etc/libvirt/qemu.conf; echo '        "/dev/random", "/dev/urandom",'>> /etc/libvirt/qemu.conf; echo '        "/dev/ptmx", "/dev/kvm", "/dev/kqemu",'>> /etc/libvirt/qemu.conf; echo '        "/dev/rtc", "/dev/hpet", "/dev/net/tun",'>> /etc/libvirt/qemu.conf; echo ']'>> /etc/libvirt/qemu.conf
- ---> Using cache
- ---> c768906652ec
+ ---> 7af08a0a4f18
+Step 3 : RUN apt-get -qqy update && apt-get install -y --no-install-recommends   libvirt-bin   libvirt0   python-libvirt   qemu-kvm   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ ---> Running in 00084c4c07ef
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following extra packages will be installed:
+  acl augeas-lenses bridge-utils cgroup-lite dbus dnsmasq-base gettext-base
+.
+.
+.
+Removing intermediate container cc610ea1696f
 Step 11 : LABEL net.juniper.openstack nova
- ---> Running in 437c931b43e0
- ---> e90a9b9d3604
-Removing intermediate container 437c931b43e0
+ ---> Running in c39c929a4487
+ ---> e86d3138ecd2
+Removing intermediate container c39c929a4487
 Step 12 : LABEL net.juniper.node compute
- ---> Running in 230abe9b41a7
- ---> 09da81eeb38b
-Removing intermediate container 230abe9b41a7
+ ---> Running in a089d9ba313b
+ ---> 4b350c3d57f6
+Removing intermediate container a089d9ba313b
 Step 13 : CMD /usr/sbin/libvirtd -l
- ---> Running in 3371ac7acee0
- ---> 67b4febce1c7
-Removing intermediate container 3371ac7acee0
-Successfully built 67b4febce1c7
+ ---> Running in 746e25d6c66b
+ ---> 0828e2df0f6f
+Removing intermediate container 746e25d6c66b
+Successfully built 0828e2df0f6f
 ```
+
+In order to streamline the build process a build script can be found  
+under 
+```
+root:~/# ll ~/Dockerfiles/scripts/build.py
+-rwxr-xr-x 1 root root 2288 Nov 10 02:53 /root/Dockerfiles/scripts/build.py*
+```
+
+It uses a yaml file as an input paramater and builds base-, sub- or individual  
+containers:
+```
+root:~/Dockerfiles/scripts# ./build.py -h
+usage: build.py [-h] [-b] [-s] [-c CONTAINER] file
+
+positional arguments:
+  file                  yaml file containing the container structure
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -b, --base            switch to build all base images
+  -s, --sub             switch to build all sub images
+  -c CONTAINER, --container CONTAINER
+                        specifies a container as listed in file
 
 ```
