@@ -361,7 +361,7 @@ by the script. The following script creates a nova.conf
 file. As all nova services use the same nova.conf file  
 the entrypoint script is injected into the base nova image.  
 If a per subcontainer configuration is needed the  
-entrypoint.sh script will be injected into the subcontainer. 
+entrypoint.sh script will be injected into the subcontainer.  
 Variables like $HOST_IP, $KEYSTONE_SERVER etc. must be  
 passed to the docker run command.
 
