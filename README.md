@@ -8,3 +8,25 @@ OpenStack/OpenContrail deployment system.
 
   - Common (components shared between OpenStack and OpenContrail)  
     - Keystone
+    - RabbitMQ
+    - Redis
+    - Memcached  
+
+  - OpenStack
+    - Nova  
+      - api
+      - cert
+      - compute
+      - conductor
+      - consoleauth
+      - scheduler
+      - novncproxy
+    - Neutron
+      - server
+    - Cinder
+      - api
+      - scheduler
+    - Glance
+      - registry
+      - api
+    - Libvirt
