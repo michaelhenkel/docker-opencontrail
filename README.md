@@ -30,3 +30,31 @@ OpenStack/OpenContrail deployment system.
       - registry
       - api
     - Libvirt
+
+  - OpenContrail
+    - Database
+      - cassandra
+      - zookeeper
+      - kafka
+    - Config
+      - api
+      - scv-monitor
+      - schema
+      - discovery
+      - device-manager
+    - Analytics
+      - api
+      - alarm
+      - snmp
+      - query
+      - collector
+      - topology
+    - Control
+      - control
+      - named
+      - dns
+    - Webui
+      - job
+      - server
+    - Ifmap
+    
