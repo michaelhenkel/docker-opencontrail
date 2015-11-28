@@ -831,3 +831,13 @@ required:
    09:45:42.243921 IP 192.168.0.14.58833 > 192.168.0.13.4789: VXLAN, flags [I] (0x08), vni 4
    ```
 
+#ubuntu compute
+echo deb https://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+apt-get update
+apt-get install -y lxc-docker
+
+curl -L https://github.com/docker/compose/releases/download/VERSION_NUM/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+sed -i 's_^ExecStart.* .*_& --insecure-registry 192.168.0.1:5100_' /lib/systemd/system/docker.service
+systemctl restart docker

@@ -1,38 +1,58 @@
-version: contrail-3.0-2668
+contrailversion: 3.0
+contrailbuild: 2676
+openstackversion: liberty
+commonversion: 1.0
+containerpath: /root/Dockerfiles/contrail
+#repo: localhost:5100
+repo: michaelhenkel
 containers:
- analytics:
-   - alarm
-   - api
-   - collector
-   - query
-   - snmp
-   - topology
- config:
-   - api
-   - device-manager
-   - discovery
-   - schema
-   - svc-monitor
- control:
-   - control
-   - dns
-   - named
- nova:
-   - api
-   - cert
-   - compute
-   - conductor
-   - consoleauth
-   - novncproxy
-   - scheduler
- webui:
-   - job
-   - server
- ifmap:
- cassandra:
- zookeeper:
- memcached:
- rabbitmq:
- keystone:
- vrouter-agent:
- neutron-server:
+  openstack:
+    openstackbase:
+    nova:
+      - api
+      - cert
+      - compute
+      - conductor
+      - consoleauth
+      - novncproxy
+      - scheduler
+    glance:
+      - api
+      - registry
+    cinder:
+      - api
+      - scheduler
+    neutron-server:
+    horizon:
+    keystone:
+  contrail:
+    analytics:
+      - alarm
+      - api
+      - collector
+      - query
+      - snmp
+      - topology
+    config:
+      - api
+      - device-manager
+      - discovery
+      - schema
+      - svc-monitor
+    control:
+      - control
+      - dns
+      - named
+    webui:
+      - job
+      - server
+    ifmap:
+    vrouter-agent:
+    opencontrail-docker-libnetwork:
+  common:
+    mariadb:
+    cassandra:
+    zookeeper:
+    memcached:
+    rabbitmq:
+    libvirt:
