@@ -1,0 +1,4 @@
+horizon:
+  image: michaelhenkel/horizon:liberty
+  net: host
+  env_file: ./common.env

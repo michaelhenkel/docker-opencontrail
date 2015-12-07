@@ -20,15 +20,6 @@ if [ -n $CONFIG_API_SERVER ];then
     ./openstack-config --set /etc/neutron/plugins/opencontrail/ContrailPlugin.ini KEYSTONE admin_password $ADMIN_PASSWORD
     ./openstack-config --set /etc/neutron/plugins/opencontrail/ContrailPlugin.ini KEYSTONE admin_tenant_name $ADMIN_PASSWORD
 fi
-
-
-if [ -n "$HOST_IP" ]; then
-    ./openstack-config --set /etc/neutron/neutron.conf DEFAULT my_ip $HOST_IP
-fi
-if [ -n "$VNC_PROXY" ]; then
-    ./openstack-config --set /etc/neutron/neutron.conf DEFAULT vncserver_listen $VNC_PROXY
-    ./openstack-config --set /etc/neutron/neutron.conf DEFAULT vncserver_proxyclient_address $VNC_PROXY
-fi
 if [ -n "$KEYSTONE_SERVER" ]; then
     ./openstack-config --set /etc/neutron/neutron.conf DEFAULT notify_nova_on_port_status_changes True
     ./openstack-config --set /etc/neutron/neutron.conf DEFAULT notify_nova_on_port_data_changes True

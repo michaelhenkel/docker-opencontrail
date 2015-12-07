@@ -1,0 +1,8 @@
+cinder-api:
+  image: michaelhenkel/cinder-api:liberty
+  net: host
+  env_file: ./common.env
+cinder-scheduler:
+  image: michaelhenkel/cinder-scheduler:liberty
+  net: host
+  env_file: ./common.env

@@ -1,5 +1,5 @@
 contrailversion: 3.0
-contrailbuild: 2676
+contrailbuild: 2680
 openstackversion: liberty
 commonversion: 1.0
 containerpath: /root/Dockerfiles/contrail
@@ -56,3 +56,4 @@ containers:
     memcached:
     rabbitmq:
     libvirt:
+    redis:

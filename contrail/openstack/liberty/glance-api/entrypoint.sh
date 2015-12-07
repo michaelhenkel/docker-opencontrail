@@ -4,7 +4,7 @@
 ./openstack-config --set /etc/glance/glance-api.conf glance_store filesystem_store_datadir = /var/lib/glance/images/
 if [ -n "$MYSQL_SERVER" ]; then
     ./openstack-config --del /etc/glance/glance-api.conf database sqlite_db
-    ./openstack-config --set /etc/glance/glance-api.conf database connection mysql://glance:$ADMIN_PASSWORD@$MYSQL_SERVER/glance
+    ./openstack-config --set /etc/glance/glance-api.conf database connection mysql+pymysql://glance:$ADMIN_PASSWORD@$MYSQL_SERVER/glance
 fi
 if [ -n "$KEYSTONE_SERVER" ]; then
     ./openstack-config --del /etc/glance/glance-api.conf keystone_authtoken identity_uri
@@ -22,5 +22,9 @@ if [ -n "$KEYSTONE_SERVER" ]; then
     ./openstack-config --set /etc/glance/glance-api.conf keystone_authtoken password $ADMIN_PASSWORD
     ./openstack-config --set /etc/glance/glance-api.conf paste_deploy flavor keystone
 fi
+if [ -n "$VERBOSE" ]; then
+    ./openstack-config --set /etc/glance/glance-api.conf DEFAULT verbose True
+fi
+
 
 exec "$@"

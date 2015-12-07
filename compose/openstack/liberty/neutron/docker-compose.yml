@@ -1,0 +1,4 @@
+neutron-server:
+  image: michaelhenkel/neutron-server:liberty
+  net: host
+  env_file: ./common.env

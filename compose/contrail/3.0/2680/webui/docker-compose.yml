@@ -1,0 +1,8 @@
+webui-job:
+  image: michaelhenkel/webui-job:3.0-2680
+  net: host
+  env_file: ./common.env
+webui-server:
+  image: michaelhenkel/webui-server:3.0-2680
+  net: host
+  env_file: ./common.env

@@ -1,0 +1,4 @@
+keystone:
+  image: michaelhenkel/keystone:liberty
+  net: host
+  env_file: ./common.env

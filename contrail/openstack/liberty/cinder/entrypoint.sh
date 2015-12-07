@@ -2,7 +2,7 @@
 ./openstack-config --set /etc/cinder/cinder.conf DEFAULT my_ip $HOST_IP
 ./openstack-config --set /etc/cinder/cinder.conf oslo_concurrency lock_path /var/lock/cinder
 if [ -n "$MYSQL_SERVER" ]; then
-    ./openstack-config --set /etc/cinder/cinder.conf database connection mysql://cinder:$ADMIN_PASSWORD@$MYSQL_SERVER/cinder
+    ./openstack-config --set /etc/cinder/cinder.conf database connection mysql+pymysql://cinder:$ADMIN_PASSWORD@$MYSQL_SERVER/cinder
 fi
 if [ -n "$KEYSTONE_SERVER" ]; then
     ./openstack-config --del /etc/cinder/cinder.conf keystone_authtoken identity_uri

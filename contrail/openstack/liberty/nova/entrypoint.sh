@@ -4,8 +4,8 @@ if [ -n "$HOST_IP" ]; then
     ./openstack-config --set /etc/nova/nova.conf DEFAULT my_ip $HOST_IP
 fi
 if [ -n "$VNC_PROXY" ]; then
-    ./openstack-config --set /etc/nova/nova.conf DEFAULT vncserver_listen $VNC_PROXY
-    ./openstack-config --set /etc/nova/nova.conf DEFAULT vncserver_proxyclient_address $VNC_PROXY
+    ./openstack-config --set /etc/nova/nova.conf vnc vncserver_listen $VNC_PROXY
+    ./openstack-config --set /etc/nova/nova.conf vnc vncserver_proxyclient_address $VNC_PROXY
 fi
 if [ -n "$NEUTRON_SERVER" ]; then
     ./openstack-config --set /etc/nova/nova.conf neutron admin_auth_url http://$KEYSTONE_SERVER:35357/v2.0
@@ -21,7 +21,7 @@ if [ -n "$NEUTRON_SERVER" ]; then
 fi
 if [ -n "$KEYSTONE_SERVER" ]; then
     ./openstack-config --set /etc/nova/nova.conf DEFAULT auth_strategy keystone
-    ./openstack-config --set /etc/nova/nova.conf DEFAULT network_api_class nova_contrail_vif.contrailvif.ContrailNetworkAPI
+#    ./openstack-config --set /etc/nova/nova.conf DEFAULT network_api_class nova_contrail_vif.contrailvif.ContrailNetworkAPI
     ./openstack-config --del /etc/nova/nova.conf keystone_authtoken identity_uri
     ./openstack-config --del /etc/nova/nova.conf keystone_authtoken admin_tenant_name
     ./openstack-config --del /etc/nova/nova.conf keystone_authtoken admin_user
@@ -39,17 +39,18 @@ fi
 if [ -n "$RABBIT_SERVER" ]; then
     ./openstack-config --set /etc/nova/nova.conf DEFAULT rpc_backend rabbit
     ./openstack-config --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_host $RABBIT_SERVER
+    ./openstack-config --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_userid guest
     ./openstack-config --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_password guest
 fi
-if [ -n "$HOST_IP" ]; then
-    ./openstack-config --set /etc/nova/nova.conf DEFAULT my_ip $HOST_IP
-fi
 if [ -n "$MYSQL_SERVER" ]; then
-    ./openstack-config --set /etc/nova/nova.conf database connection mysql://nova:$ADMIN_PASSWORD@$MYSQL_SERVER/nova
+    ./openstack-config --set /etc/nova/nova.conf database connection mysql+pymysql://nova:$ADMIN_PASSWORD@$MYSQL_SERVER/nova
 fi
 if [ -n "$GLANCE_SERVER" ]; then
     ./openstack-config --set /etc/nova/nova.conf glance host $GLANCE_SERVER
 fi
 ./openstack-config --set /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
+./openstack-config --set /etc/nova/nova.conf DEFAULT enabled_apis osapi_compute,metadata
+./openstack-config --set /etc/nova/nova.conf DEFAULT firewall_driver nova.virt.firewall.NoopFirewallDriver
+./openstack-config --set /etc/nova/nova.conf DEFAULT network_api_class nova.network.neutronv2.api.API
 
 exec "$@"

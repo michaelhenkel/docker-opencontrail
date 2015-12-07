@@ -1,0 +1,28 @@
+config-api:
+  image: michaelhenkel/config-api:3.0-2680
+  net: host
+  env_file: ./common.env
+config-device-manager:
+  image: michaelhenkel/config-device-manager:3.0-2680
+  net: host
+  env_file: ./common.env
+config-discovery:
+  image: michaelhenkel/config-discovery:3.0-2680
+  net: host
+  env_file: ./common.env
+config-schema:
+  image: michaelhenkel/config-schema:3.0-2680
+  net: host
+  env_file: ./common.env
+config-svc-monitor:
+  image: michaelhenkel/config-svc-monitor:3.0-2680
+  net: host
+  env_file: ./common.env
+ifmap:
+  image: michaelhenkel/ifmap:3.0-2680
+  net: host
+  env_file: ./common.env
+#redis:
+#  image: michaelhenkel/redis:1.0
+#  net: host
+#  env_file: ./common.env

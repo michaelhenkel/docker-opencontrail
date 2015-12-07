@@ -1,0 +1,26 @@
+nova-api:
+  cap_add:
+    - NET_ADMIN
+  image: localhost:5100/nova-api:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+nova-cert:
+  image: localhost:5100/nova-cert:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+nova-conductor:
+  image: localhost:5100/nova-conductor:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+nova-consoleauth:
+  image: localhost:5100/nova-consoleauth:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+nova-novncproxy:
+  image: localhost:5100/nova-novncproxy:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+nova-scheduler:
+  image: localhost:5100/nova-scheduler:contrail-3.0-2668
+  net: host
+  env_file: ./common.env

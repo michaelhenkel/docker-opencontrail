@@ -53,7 +53,8 @@ fi
 ./openstack-config --set /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
 ./openstack-config --set /etc/nova/nova-compute.conf DEFAULT compute_driver libvirt.LibvirtDriver
 ./openstack-config --set /etc/nova/nova-compute.conf DEFAULT libvirt_vif_driver nova_contrail_vif.contrailvif.VRouterVIFDriver
-./openstack-config --set /etc/nova/nova-compute.conf DEFAULT network_api_class nova_contrail_vif.contrailvif.ContrailNetworkAPI
+#./openstack-config --set /etc/nova/nova-compute.conf DEFAULT network_api_class nova_contrail_vif.contrailvif.ContrailNetworkAPI
+./openstack-config --set /etc/nova/nova-compute.conf DEFAULT network_api_class nova.network.neutronv2.api.API
 ./openstack-config --set /etc/nova/nova-compute.conf libvirt virt_type kvm
 ./openstack-config --set /etc/nova/nova-compute.conf libvirt connection_uri qemu+tcp://$HOST_IP/system
 ./openstack-config --set /etc/nova/nova-compute.conf libvirt live_migration_uri qemu+tcp://$HOST_IP/system

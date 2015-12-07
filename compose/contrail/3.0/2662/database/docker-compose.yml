@@ -1,0 +1,15 @@
+cassandra:
+  image: localhost:5100/cassandra:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+  volumes:
+   - /dockervolumes/cassandra1/var/lib/cassandra/data:/var/lib/cassandra/data
+zookeeper:
+  image: localhost:5100/zookeeper:contrail-3.0-2668
+  net: host
+  env_file: ./common.env
+  volumes:
+    - /dockervolumes/zookeeper1/var/lib/zookeeper:/var/lib/zookeeper
+  environment:
+    - ADVERTISED_HOST=192.168.0.1
+    - ADVERTISED_PORT=9092
