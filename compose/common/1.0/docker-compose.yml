@@ -13,9 +13,6 @@ memcached:
 mariadb:
   volumes:
     - /dockervolumes/mariadb1/var/lib/mysql:/var/lib/mysql
-  environment:
-    - MYSQL_ROOT_PASSWORD=contrail123
-    - MAX_CONNECTIONS=1000
   image: michaelhenkel/mariadb:1.0
   net: host
   env_file: /etc/docker/contrail/common.env

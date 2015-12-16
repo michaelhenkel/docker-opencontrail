@@ -10,6 +10,3 @@ zookeeper:
   env_file: /etc/docker/contrail/common.env
   volumes:
     - /dockervolumes/zookeeper1/var/lib/zookeeper:/var/lib/zookeeper
-  environment:
-    - ADVERTISED_HOST=192.168.0.1
-    - ADVERTISED_PORT=9092
