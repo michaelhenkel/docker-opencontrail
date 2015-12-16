@@ -1,4 +1,4 @@
 horizon:
-  image: michaelhenkehorizon:liberty
+  image: michaelhenkel/horizon:liberty
   net: host
   env_file: /etc/docker/contrail/common.env

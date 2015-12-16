@@ -1,9 +1,9 @@
 mariadb:
   volumes:
-    -dockervolumemariadbvalimysqlvalimysql
+    - /dockervolumes/mariadb1/var/lib/mysql:/var/lib/mysql
   environment:
     - MYSQL_ROOT_PASSWORD=contrail123
     - MAX_CONNECTIONS=1000
-  image: localhost:510mariadb:contrail-3.0-2668
+  image: localhost:5100/mariadb:contrail-3.0-2668
   net: host
   env_file: /etc/docker/contrail/common.env

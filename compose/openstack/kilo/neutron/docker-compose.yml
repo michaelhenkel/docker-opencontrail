@@ -1,4 +1,4 @@
 neutron-server:
-  image: localhost:510neutron-server:contrail-3.0-2668
+  image: localhost:5100/neutron-server:contrail-3.0-2668
   net: host
   env_file: /etc/docker/contrail/common.env

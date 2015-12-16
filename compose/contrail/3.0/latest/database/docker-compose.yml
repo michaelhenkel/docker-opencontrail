@@ -1,15 +1,15 @@
 cassandra:
-  image: michaelhenkecassandra:1.0
+  image: michaelhenkel/cassandra:1.0
   net: host
   env_file: /etc/docker/contrail/common.env
   volumes:
-   -dockervolumecassandravalicassandrdatavalicassandrdata
+   - /dockervolumes/cassandra1/var/lib/cassandra/data:/var/lib/cassandra/data
 zookeeper:
-  image: michaelhenkezookeeper:1.0
+  image: michaelhenkel/zookeeper:1.0
   net: host
   env_file: /etc/docker/contrail/common.env
   volumes:
-    -dockervolumezookeepervalizookeepervalizookeeper
+    - /dockervolumes/zookeeper1/var/lib/zookeeper:/var/lib/zookeeper
   environment:
     - ADVERTISED_HOST=192.168.0.1
     - ADVERTISED_PORT=9092

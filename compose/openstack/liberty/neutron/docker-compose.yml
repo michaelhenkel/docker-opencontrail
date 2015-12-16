@@ -1,4 +1,4 @@
 neutron-server:
-  image: michaelhenkeneutron-server:liberty
+  image: michaelhenkel/neutron-server:liberty
   net: host
   env_file: /etc/docker/contrail/common.env

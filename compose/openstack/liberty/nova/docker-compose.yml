@@ -1,26 +1,26 @@
 nova-api:
   cap_add:
     - NET_ADMIN
-  image: michaelhenkenova-api:liberty
+  image: michaelhenkel/nova-api:liberty
   net: host
   env_file: /etc/docker/contrail/common.env
 nova-cert:
-  image: michaelhenkenova-cert:liberty
+  image: michaelhenkel/nova-cert:liberty
   net: host
   env_file: /etc/docker/contrail/common.env
 nova-conductor:
-  image: michaelhenkenova-conductor:liberty
+  image: michaelhenkel/nova-conductor:liberty
   net: host
   env_file: /etc/docker/contrail/common.env
 nova-consoleauth:
-  image: michaelhenkenova-consoleauth:liberty
+  image: michaelhenkel/nova-consoleauth:liberty
   net: host
   env_file: /etc/docker/contrail/common.env
 nova-novncproxy:
-  image: michaelhenkenova-novncproxy:liberty
+  image: michaelhenkel/nova-novncproxy:liberty
   net: host
   env_file: /etc/docker/contrail/common.env
 nova-scheduler:
-  image: michaelhenkenova-scheduler:liberty
+  image: michaelhenkel/nova-scheduler:liberty
   net: host
   env_file: /etc/docker/contrail/common.env

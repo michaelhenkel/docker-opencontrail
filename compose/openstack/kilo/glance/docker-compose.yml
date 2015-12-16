@@ -1,8 +1,8 @@
 glance-api:
-  image: localhost:510glance-api:contrail-3.0-2668
+  image: localhost:5100/glance-api:contrail-3.0-2668
   net: host
   env_file: /etc/docker/contrail/common.env
 glance-registry:
-  image: localhost:510glance-registry:contrail-3.0-2668
+  image: localhost:5100/glance-registry:contrail-3.0-2668
   net: host
   env_file: /etc/docker/contrail/common.env
