@@ -1,15 +1,15 @@
 control-control:
-  image: michaelhenkel/control-control:3.0-latest
+  image: michaelhenkecontrol-control:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 control-dns:
   cap_add:
     - ALL
-  image: michaelhenkel/control-dns:3.0-latest
+  image: michaelhenkecontrol-dns:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 control-named:
   privileged: true
-  image: michaelhenkel/control-named:3.0-latest
+  image: michaelhenkecontrol-named:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env

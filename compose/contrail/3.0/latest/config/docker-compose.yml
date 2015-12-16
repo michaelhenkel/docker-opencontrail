@@ -1,28 +1,28 @@
 config-api:
-  image: michaelhenkel/config-api:3.0-latest
+  image: michaelhenkeconfig-api:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 config-device-manager:
-  image: michaelhenkel/config-device-manager:3.0-latest
+  image: michaelhenkeconfig-device-manager:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 config-discovery:
-  image: michaelhenkel/config-discovery:3.0-latest
+  image: michaelhenkeconfig-discovery:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 config-schema:
-  image: michaelhenkel/config-schema:3.0-latest
+  image: michaelhenkeconfig-schema:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 config-svc-monitor:
-  image: michaelhenkel/config-svc-monitor:3.0-latest
+  image: michaelhenkeconfig-svc-monitor:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 ifmap:
-  image: michaelhenkel/ifmap:3.0-latest
+  image: michaelhenkeifmap:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 #redis:
-#  image: michaelhenkel/redis:1.0
+#  image: michaelhenkeredis:1.0
 #  net: host
-#  env_file: ./common.env
+#  env_file: /etc/docker/contrail/common.env

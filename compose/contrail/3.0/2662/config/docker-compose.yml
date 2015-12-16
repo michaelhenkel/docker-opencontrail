@@ -1,28 +1,28 @@
 config-api:
-  image: localhost:5100/config-api:contrail-3.0-2668
+  image: localhost:510config-api:contrail-3.0-2668
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 config-device-manager:
-  image: localhost:5100/config-device-manager:contrail-3.0-2668
+  image: localhost:510config-device-manager:contrail-3.0-2668
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 config-discovery:
-  image: localhost:5100/config-discovery:contrail-3.0-2668
+  image: localhost:510config-discovery:contrail-3.0-2668
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 config-schema:
-  image: localhost:5100/config-schema:contrail-3.0-2668
+  image: localhost:510config-schema:contrail-3.0-2668
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 config-svc-monitor:
-  image: localhost:5100/config-svc-monitor:contrail-3.0-2668
+  image: localhost:510config-svc-monitor:contrail-3.0-2668
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 ifmap:
-  image: localhost:5100/ifmap:contrail-3.0-2668
+  image: localhost:510ifmap:contrail-3.0-2668
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 redis:
-  image: localhost:5100/redis:contrail-3.0-2668
+  image: localhost:510redis:contrail-3.0-2668
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env

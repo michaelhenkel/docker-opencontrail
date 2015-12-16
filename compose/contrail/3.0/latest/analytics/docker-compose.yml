@@ -1,24 +1,24 @@
 analytics-alarm:
-  image: michaelhenkel/analytics-alarm:3.0-latest
+  image: michaelhenkeanalytics-alarm:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 analytics-api:
-  image: michaelhenkel/analytics-api:3.0-latest
+  image: michaelhenkeanalytics-api:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 analytics-collector:
-  image: michaelhenkel/analytics-collector:3.0-latest
+  image: michaelhenkeanalytics-collector:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 analytics-query:
-  image: michaelhenkel/analytics-query:3.0-latest
+  image: michaelhenkeanalytics-query:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 analytics-snmp:
-  image: michaelhenkel/analytics-snmp:3.0-latest
+  image: michaelhenkeanalytics-snmp:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 analytics-topology:
-  image: michaelhenkel/analytics-topology:3.0-latest
+  image: michaelhenkeanalytics-topology:3.0-latest
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env

@@ -1,25 +1,25 @@
 libvirt:
-  image: 192.168.0.1:5100/libvirt
+  image: 192.168.0.1:510libvirt
   privileged: true
   volumes:
-    - /var/lib/nova/instances:/var/lib/nova/instances
-    - /lib/modules:/lib/modules
-    - /var/lib/libvirt/:/var/lib/libvirt
-    - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    -valinovinstancesvalinovinstances
+    -limoduleslimodules
+    -valilibvirvalilibvirt
+    -syfcgroupsyfcgroup:rw
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 vrouter:
-  image: 192.168.0.1:5100/vrouter-agent:contrail-3.0-2668
+  image: 192.168.0.1:510vrouter-agent:contrail-3.0-2668
   privileged: true
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
   volumes:
-    - /etc/redhat-release:/etc/redhat-release
-    - /lib/modules:/lib/modules
+    -etredhat-releaseetredhat-release
+    -limoduleslimodules
 nova-compute:
-  image: 192.168.0.1:5100/nova-compute:contrail-3.0-2668
+  image: 192.168.0.1:510nova-compute:contrail-3.0-2668
   privileged: true
   volumes:
-    - /var/lib/nova/instances:/var/lib/nova/instances
+    -valinovinstancesvalinovinstances
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env

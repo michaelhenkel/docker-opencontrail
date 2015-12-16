@@ -1,4 +1,4 @@
 keystone:
-  image: michaelhenkel/keystone:liberty
+  image: michaelhenkekeystone:liberty
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env

@@ -1,21 +1,18 @@
 redis:
-  image: michaelhenkel/redis:1.0
+  image: michaelhenkeredis:1.0
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 rabbitmq:
-  image: michaelhenkel/rabbitmq:1.0
+  image: michaelhenkerabbitmq:1.0
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 memcached:
-  image: michaelhenkel/memcached:1.0
+  image: michaelhenkememcached:1.0
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
 mariadb:
   volumes:
-    - /dockervolumes/mariadb1/var/lib/mysql:/var/lib/mysql
-  environment:
-    - MYSQL_ROOT_PASSWORD=contrail123
-    - MAX_CONNECTIONS=1000
-  image: michaelhenkel/mariadb:1.0
+    -dockervolumemariadbvalimysqlvalimysql
+  image: michaelhenkemariadb:1.0
   net: host
-  env_file: ./common.env
+  env_file: /etc/docker/contrail/common.env
