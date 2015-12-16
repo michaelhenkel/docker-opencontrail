@@ -1,9 +1,8 @@
 contrailversion: 3.0
-contrailbuild: 2680
+contrailbuild: latest
 openstackversion: liberty
 commonversion: 1.0
 containerpath: /root/Dockerfiles/contrail
-#repo: localhost:5100
 repo: michaelhenkel
 containers:
   openstack:

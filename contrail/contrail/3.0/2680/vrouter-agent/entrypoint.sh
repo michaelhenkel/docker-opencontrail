@@ -35,6 +35,7 @@ else
             apt-get update
             apt-get -y install gcc
             apt-get -y install linux-headers-`ls /lib/modules`
+            apt-get -y --force-yes install contrail-vrouter-dkms
         fi
    fi
 fi

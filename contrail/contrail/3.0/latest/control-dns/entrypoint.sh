@@ -34,25 +34,27 @@ AUTHN_PORT = 35357
 AUTHN_URL = /v2.0/tokens
 EOF
 fi
-touch /etc/contrail/dns/contrail-dns.conf
-echo "[DEFAULTS]" > /etc/contrail/dns/contrail-dns.conf
-echo "[DISCOVERY]" >> /etc/contrail/dns/contrail-dns.conf
-echo "[IFMAP]" >> /etc/contrail/dns/contrail-dns.conf
+touch /etc/contrail/contrail-dns.conf
+echo "[DEFAULT]" > /etc/contrail/contrail-dns.conf
+echo "[DISCOVERY]" >> /etc/contrail/contrail-dns.conf
+echo "[IFMAP]" >> /etc/contrail/contrail-dns.conf
+sed -i 's/secret123/sHE1SM8nsySdgsoRxwARtA==/g' /etc/contrail/contrail-named.conf
 
 if [ -n "$HOST_IP" ]; then
-    sed -i "/\[DEFAULTS\]/a hostip = $HOST_IP" /etc/contrail/dns/contrail-dns.conf
+    sed -i "/\[DEFAULT\]/a hostip = $HOST_IP" /etc/contrail/contrail-dns.conf
 fi
 
 if [ -n "$DISCOVERY_SERVER" ]; then
-    sed -i "/\[DISCOVERY\]/a server = $DISCOVERY_SERVER" /etc/contrail/dns/contrail-dns.conf
+    sed -i "/\[DISCOVERY\]/a server = $DISCOVERY_SERVER" /etc/contrail/contrail-dns.conf
 fi
 
 if [ -n "$IFMAP_USER" ]; then
-    sed -i "/\[IFMAP\]/a user = $IFMAP_USER" /etc/contrail/dns/contrail-dns.conf
+    sed -i "/\[IFMAP\]/a user = $IFMAP_USER.dns" /etc/contrail/contrail-dns.conf
 fi
 
 if [ -n "$IFMAP_PASSWORD" ]; then
-    sed -i "/\[IFMAP\]/a password = $IFMAP_PASSWORD" /etc/contrail/dns/contrail-dns.conf
+    sed -i "/\[IFMAP\]/a password = $IFMAP_PASSWORD.dns" /etc/contrail/contrail-dns.conf
 fi
+sed -i "/\[DEFAULT\]/a rndc_secret = sHE1SM8nsySdgsoRxwARtA==" /etc/contrail/contrail-dns.conf
 
 exec "$@"

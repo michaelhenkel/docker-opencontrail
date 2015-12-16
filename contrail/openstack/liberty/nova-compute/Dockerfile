@@ -38,7 +38,7 @@ RUN apt-get -qqy update && apt-get install -y --no-install-recommends \
   libguestfs-tools \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN echo "deb http://10.87.64.23/contrail/3.0/2680 amd64/" >> /etc/apt/sources.list
+RUN echo "deb http://10.87.64.23/contrail/3.0/latest amd64/" >> /etc/apt/sources.list
 RUN apt-get -qqy update && apt-get install -y --force-yes --no-install-recommends \
   python-contrail \
   contrail-lib \

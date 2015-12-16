@@ -1,0 +1,24 @@
+analytics-alarm:
+  image: michaelhenkel/analytics-alarm:3.0-latest
+  net: host
+  env_file: ./common.env
+analytics-api:
+  image: michaelhenkel/analytics-api:3.0-latest
+  net: host
+  env_file: ./common.env
+analytics-collector:
+  image: michaelhenkel/analytics-collector:3.0-latest
+  net: host
+  env_file: ./common.env
+analytics-query:
+  image: michaelhenkel/analytics-query:3.0-latest
+  net: host
+  env_file: ./common.env
+analytics-snmp:
+  image: michaelhenkel/analytics-snmp:3.0-latest
+  net: host
+  env_file: ./common.env
+analytics-topology:
+  image: michaelhenkel/analytics-topology:3.0-latest
+  net: host
+  env_file: ./common.env

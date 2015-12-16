@@ -1,12 +1,12 @@
-docker run -d --net host \
+docker run -it --net host \
   -v /dockervolumes/shared:/shared \
-  --env HOST_IP=10.87.64.23 \
+  --env HOST_IP=192.168.0.1 \
   --env NEUTRON_SERVER=host1 \
   --env CINDER_SERVER=host1 \
   --env NOVA_SERVER=host1 \
   --env GLANCE_SERVER=host1 \
   --env WEBUI_JOB_SERVER=host1 \
-  --env COLLECTOR_SERVER=10.87.64.23 \
+  --env COLLECTOR_SERVER=192.168.0.1 \
   --env ANALYTICS_API_SERVER=host1 \
   --env REDIS_SERVER=host1 \
   --env IFMAP_SERVER=host1 \
@@ -22,4 +22,4 @@ docker run -d --net host \
   --env ADMIN_TENANT=admin \
   --env ADMIN_TOKEN=contrail123 \
   --env ADMIN_PASSWORD=contrail123 \
-  --name webui-server1 webui-server
+  --name webui-server1 michaelhenkel/webui-server:3.0-2680 /bin/bash

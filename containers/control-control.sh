@@ -1,7 +1,6 @@
-docker run -d --net host \
+docker run -it --net host \
   -v /dockervolumes/shared:/shared \
-  --env HOST_IP=10.87.64.23 \
-  --env COLLECTOR_SERVER=10.87.64.23 \
+  --env HOST_IP=192.168.0.1 \
   --env ANALYTICS_API_SERVER=host1 \
   --env REDIS_SERVER=host1 \
   --env IFMAP_SERVER=host1 \
@@ -19,4 +18,4 @@ docker run -d --net host \
   --env ADMIN_PASSWORD=contrail123 \
   --env IFMAP_USER=host1 \
   --env IFMAP_PASSWORD=host1 \
-  --name control-control1 control-control
+  --name control-control1 michaelhenkel/control-control:3.0-2680 /bin/bash

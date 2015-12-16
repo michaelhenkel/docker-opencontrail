@@ -1,2 +1,0 @@
-Openstack keystone image
-========================

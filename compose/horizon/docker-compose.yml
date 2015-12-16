@@ -1,4 +1,0 @@
-horizon:
-  image: localhost:5100/horizon:contrail-3.0-2668
-  net: host
-  env_file: ./common.env

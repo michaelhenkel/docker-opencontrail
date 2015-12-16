@@ -34,5 +34,6 @@ AUTHN_PORT = 35357
 AUTHN_URL = /v2.0/tokens
 EOF
 fi
+sed -i 's/secret123/sHE1SM8nsySdgsoRxwARtA==/g' /etc/contrail/dns/contrail-named.conf
 
 exec "$@"

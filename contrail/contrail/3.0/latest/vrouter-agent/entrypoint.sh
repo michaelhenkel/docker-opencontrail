@@ -18,25 +18,42 @@ fi
 ./openstack-config --set /etc/contrail/contrail-vrouter-agent.conf VIRTUAL-HOST-INTERFACE gateway $GATEWAY_IP
 ./openstack-config --set /etc/contrail/contrail-vrouter-agent.conf VIRTUAL-HOST-INTERFACE physical_interface $PHYSICAL_INTERFACE
 ./openstack-config --set /etc/contrail/contrail-vrouter-agent.conf VIRTUAL-HOST-INTERFACE compute_node_address $HOST_IP
-grep "Red Hat Enterprise Linux Server release 7.1" /etc/redhat-release
-if [ $? -eq 0 ]; then
-    lsmod |grep vrouter 
-    if [ $? -ne 0 ]; then
-        mkdir -p /lib/modules/`uname -r`/extra/net/vrouter
-        cp -r /rhel-vrouter/vrouter.ko /lib/modules/`uname -r`/extra/net/vrouter
-        depmod -a 
-    fi
-else
-    lsb_release -a |grep Ubuntu
-    if [ $? -eq 0 ]; then
-        lsmod |grep vrouter
-        if [ $? -ne 0 ]; then
-            mkdir -p /lib/modules/`ls /lib/modules`/extra/net/vrouter
-            apt-get update
-            apt-get -y install gcc
-            apt-get -y install linux-headers-`ls /lib/modules`
-        fi
-   fi
+
+if [ -n "$CREATE_MODULE" ]; then
+  cd /usr/src/modules/contrail-vrouter
+  tar zxvf contrail-vrouter-3.0.tar.gz
+  grep "Red Hat Enterprise Linux Server release 7.1" /etc/redhat-release
+  if [ $? -eq 0 ]; then
+      cd /usr/bin
+      rm gcc g++ cpp
+      ln -s gcc-4.9 gcc
+      ln -s g++-4.9 g++
+      ln -s cpp-4.9 cpp
+      cd /usr/src/modules/contrail-vrouter
+      make
+      mkdir -p /lib/modules/`uname -r`/extra/net/vrouter
+      cp -r /usr/src/modules/contrail-vrouter/vrouter.ko /lib/modules/`uname -r`/extra/net/vrouter
+      depmod -a
+      lsmod |grep vrouter 
+      if [ $? -eq 0 ]; then
+        rmmod vrouter
+      fi
+      #modprobe vrouter
+  else
+      lsb_release -a |grep Ubuntu
+      if [ $? -eq 0 ]; then
+          cd /usr/src/modules/contrail-vrouter
+          make
+          mkdir -p /lib/modules/`uname -r`/extra/net/vrouter
+          cp -r /usr/src/modules/contrail-vrouter/vrouter.ko /lib/modules/`uname -r`/extra/net/vrouter
+          depmod -a
+          lsmod |grep vrouter
+          if [ $? -eq 0 ]; then
+            rmmod vrouter
+          fi
+          #modprobe vrouter
+     fi
+  fi
 fi
 
 cat << EOF > /etc/contrail/agent_param

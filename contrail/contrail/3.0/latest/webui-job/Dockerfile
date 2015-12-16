@@ -5,6 +5,6 @@ COPY entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["/usr/bin/nodejs","jobServerStart.js"]
+CMD ["/usr/bin/node","jobServerStart.js"]
 LABEL net.juniper.contrail=webui
 LABEL net.juniper.node=controller

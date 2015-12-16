@@ -15,6 +15,10 @@ parser.add_argument('-c','--container',
                    help='specifies a container as listed in file')
 parser.add_argument('-t','--containerType',
                    help='container type (openstack/contrail/common)')
+parser.add_argument('-x','--serviceType',
+                   help='version')
+parser.add_argument('-v','--version',
+                   help='version')
 parser.add_argument('file',
                    help='yaml file containing the container structure')
 args = parser.parse_args()
@@ -32,9 +36,11 @@ repo = configYaml['repo']
 def buildbase(containerType, buildDir, version):
     for basecontainer in configYaml['containers'][containerType]:
         subprocess.call('cd ' + buildDir + '/' + basecontainer + ' && docker build -t ' + repo + '/' + basecontainer + ':' + version + ' . && docker push ' + repo + '/' + basecontainer + ':' + version, shell=True)
+        subprocess.call('docker pull ' + repo + '/' + basecontainer + ':' + version, shell=True)
 
 def buildcon(containerType, buildDir, version):
     subprocess.call('cd ' + buildDir + '/' + args.container + ' && docker build -t ' + repo + '/' + args.container + ':' + version + ' . && docker push ' + repo + '/' + args.container + ':' + version, shell=True)
+    subprocess.call('docker pull ' + repo + '/' + args.container + ':' + version, shell=True)
         
 def buildsub(containerType, buildDir, version):
     for basecontainer in configYaml['containers'][containerType].keys():
@@ -42,25 +48,13 @@ def buildsub(containerType, buildDir, version):
             for subcontainer in configYaml['containers'][containerType][basecontainer]:
                 subcon = basecontainer  + '-' + subcontainer
                 subprocess.call('cd ' + buildDir + '/' + subcon + ' && docker build -t ' + repo + '/' + subcon + ':' + version + ' .  && docker push ' + repo + '/' + subcon + ':' + version, shell=True)
+                subprocess.call('docker pull ' + repo + '/' + subcon + ':' + version, shell=True)
              
-    
-#def buildsub():
-#    for basecontainer in configYaml['containers'].keys():
-#        if configYaml['containers'][basecontainer]:
-#            for subcontainer in configYaml['containers'][basecontainer]:
-#                subcon = basecontainer+'-'+subcontainer
-#                print subcon
-#                print 'cd ' + containerDir + subcon + ' && docker build -t ' + repo + '/' + subcon + ':' + configYaml['version'] + ' .  && docker push ' + repo + '/' + subcon + ':' + configYaml['version']
-#                subprocess.call('cd ' + containerDir + subcon + ' && docker build -t ' + repo + '/' + subcon + ':' + configYaml['version'] + ' .  && docker push ' + repo + '/' + subcon + ':' + configYaml['version'], shell=True)
-
-#def buildbase():
-#    for basecontainer in configYaml['containers'].keys():
-#        print basecontainer
-#        subprocess.call('cd ' + containerDir + basecontainer + ' && docker build -t ' + repo + '/' + basecontainer + ':' + configYaml['version'] + ' . && docker push ' + repo + '/' + basecontainer + ':' + configYaml['version'], shell=True)
-
-#def buildcon():
-#    print 'cd ' + containerDir + args.container + ' && docker build -t ' + repo + '/' + args.container + ':' + configYaml['version'] + ' . && docker push ' + repo + '/' + args.container + ':' + configYaml['version']
-#    subprocess.call('cd ' + containerDir + args.container + ' && docker build -t ' + repo + '/' + args.container + ':' + configYaml['version'] + ' . && docker push ' + repo + '/' + args.container + ':' + configYaml['version'], shell=True)
+def buildservice(containerType, serviceType, buildDir, version):
+    subprocess.call('cd ' + buildDir + '/' + serviceType + ' && docker build -t ' + repo + '/' + serviceType + ':' + version + ' . && docker push ' + repo + '/' + serviceType + ':' + version, shell=True)
+    for servicecontainer in configYaml['containers'][containerType][serviceType]:
+        subprocess.call('cd ' + buildDir + '/' + servicecontainer + ' && docker build -t ' + repo + '/' + servicecontainer + ':' + version + ' . && docker push ' + repo + '/' + servicecontainer + ':' + version, shell=True)
+        subprocess.call('docker pull ' + repo + '/' + servicecontainer + ':' + version)
 
 if args.containerType == 'openstack':
     buildDir = openstackContainerDir
@@ -78,3 +72,6 @@ if args.sub == True:
     buildsub(args.containerType, buildDir, version)
 if args.container:
     buildcon(args.containerType, buildDir, version)
+if args.serviceType:
+    buildservice(args.containerType, args.serviceType, buildDir, version)
+

@@ -49,11 +49,11 @@ if [ -n "$DISCOVERY_SERVER" ]; then
 fi
 
 if [ -n "$IFMAP_USER" ]; then
-    sed -i "/\[IFMAP\]/a user = $IFMAP_USER" /etc/contrail/contrail-dns.conf
+    sed -i "/\[IFMAP\]/a user = $IFMAP_USER.dns" /etc/contrail/contrail-dns.conf
 fi
 
 if [ -n "$IFMAP_PASSWORD" ]; then
-    sed -i "/\[IFMAP\]/a password = $IFMAP_PASSWORD" /etc/contrail/contrail-dns.conf
+    sed -i "/\[IFMAP\]/a password = $IFMAP_PASSWORD.dns" /etc/contrail/contrail-dns.conf
 fi
 sed -i "/\[DEFAULT\]/a rndc_secret = sHE1SM8nsySdgsoRxwARtA==" /etc/contrail/contrail-dns.conf
 
