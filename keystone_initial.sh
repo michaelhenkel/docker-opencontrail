@@ -10,6 +10,12 @@ ADMIN_PASSWORD=contrail123
 
 ####### keystone
 
+mysql -u root -h $MYSQL_SERVER -p$ADMIN_PASSWORD -e 'CREATE DATABASE keystone;'
+mysql -u root -h $MYSQL_SERVER -p$ADMIN_PASSWORD -e "GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'localhost' \
+  IDENTIFIED BY '$ADMIN_PASSWORD';
+  GRANT ALL PRIVILEGES ON keystone.* TO 'keystone'@'%' \
+  IDENTIFIED BY '$ADMIN_PASSWORD';"
+
 openstack service create   --name keystone --description "OpenStack Identity" identity
 openstack endpoint create \
   --publicurl http://$KEYSTONE_SERVER:5000/v2.0 \
