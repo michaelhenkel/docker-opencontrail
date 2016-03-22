@@ -35,11 +35,11 @@ repo = configYaml['repo']
 
 def buildbase(containerType, buildDir, version):
     for basecontainer in configYaml['containers'][containerType]:
-        subprocess.call('cd ' + buildDir + '/' + basecontainer + ' && docker build -t ' + repo + '/' + basecontainer + ':' + version + ' . && docker push ' + repo + '/' + basecontainer + ':' + version, shell=True)
+        subprocess.call('cd ' + buildDir + '/' + basecontainer + ' && docker build -t ' + repo + '/' + basecontainer + ':' + version + ' --no-cache . && docker push ' + repo + '/' + basecontainer + ':' + version, shell=True)
         subprocess.call('docker pull ' + repo + '/' + basecontainer + ':' + version, shell=True)
 
 def buildcon(containerType, buildDir, version):
-    subprocess.call('cd ' + buildDir + '/' + args.container + ' && docker build -t ' + repo + '/' + args.container + ':' + version + ' . && docker push ' + repo + '/' + args.container + ':' + version, shell=True)
+    subprocess.call('cd ' + buildDir + '/' + args.container + ' && docker build -t ' + repo + '/' + args.container + ':' + version + ' --no-cache . && docker push ' + repo + '/' + args.container + ':' + version, shell=True)
     subprocess.call('docker pull ' + repo + '/' + args.container + ':' + version, shell=True)
         
 def buildsub(containerType, buildDir, version):
@@ -47,13 +47,15 @@ def buildsub(containerType, buildDir, version):
         if configYaml['containers'][containerType][basecontainer]:
             for subcontainer in configYaml['containers'][containerType][basecontainer]:
                 subcon = basecontainer  + '-' + subcontainer
-                subprocess.call('cd ' + buildDir + '/' + subcon + ' && docker build -t ' + repo + '/' + subcon + ':' + version + ' .  && docker push ' + repo + '/' + subcon + ':' + version, shell=True)
+                subprocess.call('cd ' + buildDir + '/' + subcon + ' && docker build -t ' + repo + '/' + subcon + ':' + version + ' --no-cache .  && docker push ' + repo + '/' + subcon + ':' + version, shell=True)
                 subprocess.call('docker pull ' + repo + '/' + subcon + ':' + version, shell=True)
              
 def buildservice(containerType, serviceType, buildDir, version):
-    subprocess.call('cd ' + buildDir + '/' + serviceType + ' && docker build -t ' + repo + '/' + serviceType + ':' + version + ' . && docker push ' + repo + '/' + serviceType + ':' + version, shell=True)
+    print 'cd ' + buildDir + '/' + serviceType
+    subprocess.call('cd ' + buildDir + '/' + serviceType + ' && docker build -t ' + repo + '/' + serviceType + ':' + version + ' --no-cache . && docker push ' + repo + '/' + serviceType + ':' + version, shell=True)
     for servicecontainer in configYaml['containers'][containerType][serviceType]:
-        subprocess.call('cd ' + buildDir + '/' + servicecontainer + ' && docker build -t ' + repo + '/' + servicecontainer + ':' + version + ' . && docker push ' + repo + '/' + servicecontainer + ':' + version, shell=True)
+        print 'cd ' + buildDir + '/' + servicecontainer
+        subprocess.call('cd ' + buildDir + '/' + serviceType + '-' + servicecontainer + ' && docker build -t ' + repo + '/' + servicecontainer + ':' + version + ' --no-cache . && docker push ' + repo + '/' + servicecontainer + ':' + version, shell=True)
         subprocess.call('docker pull ' + repo + '/' + servicecontainer + ':' + version)
 
 if args.containerType == 'openstack':

@@ -6,7 +6,7 @@ fi
 
 
 if [ -n "$MYSQL_SERVER" ]; then
-    ./openstack-config --set /etc/keystone/keystone.conf database connection mysql+pymysql://keystone:$ADMIN_PASSWORD@$MYSQL_SERVR/keystone
+    ./openstack-config --set /etc/keystone/keystone.conf database connection mysql+pymysql://keystone:$ADMIN_PASSWORD@$MYSQL_SERVER/keystone
 fi
 
 if [ -n "$MEMCACHED_SERVER" ]; then

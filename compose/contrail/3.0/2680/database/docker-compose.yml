@@ -11,5 +11,5 @@ zookeeper:
   volumes:
     - /dockervolumes/zookeeper1/var/lib/zookeeper:/var/lib/zookeeper
   environment:
-    - ADVERTISED_HOST=192.168.0.1
+    - ADVERTISED_HOST=172.16.8.132
     - ADVERTISED_PORT=9092

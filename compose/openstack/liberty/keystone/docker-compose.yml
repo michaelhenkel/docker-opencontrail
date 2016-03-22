@@ -1,4 +1,6 @@
-keystone:
-  image: michaelhenkel/keystone:liberty
-  net: host
-  env_file: /etc/docker/contrail/common.env
+version: '2'
+services:
+  keystone:
+    image: michaelhenkel/keystone:liberty
+    network_mode: host
+    env_file: /etc/docker/contrail/common.env

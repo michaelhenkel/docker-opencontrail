@@ -1,18 +1,20 @@
-redis:
-  image: michaelhenkel/redis:1.0
-  net: host
-  env_file: /etc/docker/contrail/common.env
-rabbitmq:
-  image: michaelhenkel/rabbitmq:1.0
-  net: host
-  env_file: /etc/docker/contrail/common.env
-memcached:
-  image: michaelhenkel/memcached:1.0
-  net: host
-  env_file: /etc/docker/contrail/common.env
-mariadb:
-  volumes:
-    - /dockervolumes/mariadb1/var/lib/mysql:/var/lib/mysql
-  image: michaelhenkel/mariadb:1.0
-  net: host
-  env_file: /etc/docker/contrail/common.env
+version: '2'
+services:
+  redis:
+    image: michaelhenkel/redis:1.0
+    network_mode: host
+    env_file: /etc/docker/contrail/common.env
+  rabbitmq:
+    image: michaelhenkel/rabbitmq:1.0
+    network_mode: host
+    env_file: /etc/docker/contrail/common.env
+  memcached:
+    image: michaelhenkel/memcached:1.0
+    network_mode: host
+    env_file: /etc/docker/contrail/common.env
+  mariadb:
+    volumes:
+      - /dockervolumes/mariadb1/var/lib/mysql:/var/lib/mysql
+    image: michaelhenkel/mariadb:1.0
+    network_mode: host
+    env_file: /etc/docker/contrail/common.env
