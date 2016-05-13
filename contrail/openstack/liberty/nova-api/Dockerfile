@@ -4,6 +4,7 @@ MAINTAINER https://hub.docker.com/r/michaelhenkel
 #RUN apt-get -qqy update && apt-get install -y --force-yes --no-install-recommends \
 #  nova-api \
 #  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN pip install python-openstackclient
 
 CMD ["/usr/bin/python","/usr/bin/nova-api"]
 

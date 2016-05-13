@@ -26,5 +26,45 @@ if [ -n "$VERBOSE" ]; then
     ./openstack-config --set /etc/glance/glance-api.conf DEFAULT verbose True
 fi
 
+mysql -h $MYSQL_SERVER -u root -p$ADMIN_PASSWORD -e "SHOW DATABASES;" |grep glance
+if [ $? -eq 1 ]; then
+  while ! nc -z $MYSQL_SERVER 3306; do
+    sleep 0.1
+  done
+  mysql -h $MYSQL_SERVER -u root -p$ADMIN_PASSWORD -e "CREATE DATABASE glance;"
+  mysql -h $MYSQL_SERVER -u root -p$ADMIN_PASSWORD -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'localhost' \
+        IDENTIFIED BY '$ADMIN_PASSWORD';"
+  mysql -h $MYSQL_SERVER -u root -p$ADMIN_PASSWORD -e "GRANT ALL PRIVILEGES ON glance.* TO 'glance'@'%' \
+        IDENTIFIED BY '$ADMIN_PASSWORD';"
+fi
+
+db_version=`glance-manage db_version`
+if [ $db_version -eq 0 ]; then
+  glance-manage db_sync
+fi
+/usr/bin/python /usr/bin/glance-api &
+while ! nc -z localhost 9292; do
+  sleep 0.1
+done
+while ! nc -z $KEYSTONE_SERVER 35357; do
+  sleep 0.1
+done
+openstack user show glance
+if [ $? -eq 1 ]; then
+  openstack user create --password $ADMIN_PASSWORD glance
+  openstack role add --project service --user glance $ADMIN_USER
+fi
+openstack service show glance
+if [ $? -eq 1 ]; then
+  openstack service create --name glance --description "OpenStack Image service" image
+fi
+openstack endpoint show glance
+if [ $? -eq 1 ]; then
+  openstack endpoint create --region RegionOne image \
+    --publicurl http://$GLANCE_API_SERVER:9292 \
+    --adminurl http://$GLANCE_API_SERVER:9292 \
+    --internalurl http://$GLANCE_API_SERVER:9292
+fi
+kill -9 $(pidof python)
 
 exec "$@"

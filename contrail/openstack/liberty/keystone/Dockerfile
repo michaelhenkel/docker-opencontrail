@@ -7,9 +7,11 @@ RUN apt-get -qqy update && apt-get install -y --no-install-recommends \
   python-keystoneclient \
   python-memcache \
   python-mysqldb \
+  python-pip \
   python-iniparse \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN pip install python-openstackclient
 COPY openstack-config /
 COPY entrypoint.sh /
 

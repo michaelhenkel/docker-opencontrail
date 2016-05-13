@@ -36,11 +36,38 @@ if [ -n "$MYSQL_SERVER" ]; then
     echo "[database]" >> /etc/nova/nova.conf
     echo "connection = mysql://nova:$ADMIN_PASSWORD@$MYSQL_SERVER/nova" >> /etc/nova/nova.conf
 fi
-if [ -n "$GLANCE_SERVER" ]; then
+if [ -n "$GLANCE_API_SERVER" ]; then
     echo "[glance]" >> /etc/nova/nova.conf
-    echo "host = $GLANCE_SERVER" >> /etc/nova/nova.conf
+    echo "host = $GLANCE_API_SERVER" >> /etc/nova/nova.conf
 fi
 echo "[oslo_concurrency]" >> /etc/nova/nova.conf
 echo "lock_path = /var/lib/nova/tmp" >> /etc/nova/nova.conf
-
+db_version=`nova-manage db_version`
+if [ $db_version -eq 0 ]; then
+  nova-manage db_sync
+fi
+/usr/bin/python /usr/bin/nova-api &
+while ! nc -z localhost 8774; do
+  sleep 0.1
+done
+while ! nc -z $KEYSTONE_SERVER 35357; do
+  sleep 0.1
+done
+openstack user show nova
+if [ $? -eq 1 ]; then
+  openstack user create --password $ADMIN_PASSWORD nova
+  openstack role add --project service --user nova $ADMIN_USER
+fi
+openstack service show nova
+if [ $? -eq 1 ]; then
+  openstack service create --name nova --description "OpenStack Image service" compute
+fi
+openstack endpoint show nova
+if [ $? -eq 1 ]; then
+  openstack endpoint create --region RegionOne compute \
+    --publicurl http://$NOVA_API_SERVER:8774/v2/%\(tenant_id\)s \
+    --adminurl http://$NOVA_API_SERVER:8774/v2/%\(tenant_id\)s \
+    --internalurl http://$NOVA_API_SERVER:8774/v2/%\(tenant_id\)s
+fi
+kill -9 $(pidof python)
 exec "$@"

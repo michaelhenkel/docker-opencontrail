@@ -1,5 +1,5 @@
 libvirt:
-  image: 172.16.8.132:5100/libvirt
+  image: 10.87.64.34:5100/libvirt
   privileged: true
   volumes:
     - /var/lib/nova/instances:/var/lib/nova/instances
@@ -9,7 +9,7 @@ libvirt:
   net: host
   env_file: /etc/docker/contrail/common.env
 vrouter:
-  image: 172.16.8.132:5100/vrouter-agent:contrail-3.0-2668
+  image: 10.87.64.34:5100/vrouter-agent:contrail-3.0-2668
   privileged: true
   net: host
   env_file: /etc/docker/contrail/common.env
@@ -17,7 +17,7 @@ vrouter:
     - /etc/redhat-release:/etc/redhat-release
     - /lib/modules:/lib/modules
 nova-compute:
-  image: 172.16.8.132:5100/nova-compute:contrail-3.0-2668
+  image: 10.87.64.34:5100/nova-compute:contrail-3.0-2668
   privileged: true
   volumes:
     - /var/lib/nova/instances:/var/lib/nova/instances

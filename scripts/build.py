@@ -35,20 +35,23 @@ repo = configYaml['repo']
 
 def buildbase(containerType, buildDir, version):
     for basecontainer in configYaml['containers'][containerType]:
-        subprocess.call('cd ' + buildDir + '/' + basecontainer + ' && docker build -t ' + repo + '/' + basecontainer + ':' + version + ' --no-cache . && docker push ' + repo + '/' + basecontainer + ':' + version, shell=True)
-        subprocess.call('docker pull ' + repo + '/' + basecontainer + ':' + version, shell=True)
+        subprocess.call('cd ' + buildDir + '/' + basecontainer + ' && docker build -t ' + repo + '/' + basecontainer + ':' + version + ' --no-cache .', shell=True)
+        #subprocess.call('cd ' + buildDir + '/' + basecontainer + ' && docker build -t ' + repo + '/' + basecontainer + ':' + version + ' --no-cache . && docker push ' + repo + '/' + basecontainer + ':' + version, shell=True)
+        #subprocess.call('docker pull ' + repo + '/' + basecontainer + ':' + version, shell=True)
 
 def buildcon(containerType, buildDir, version):
-    subprocess.call('cd ' + buildDir + '/' + args.container + ' && docker build -t ' + repo + '/' + args.container + ':' + version + ' --no-cache . && docker push ' + repo + '/' + args.container + ':' + version, shell=True)
-    subprocess.call('docker pull ' + repo + '/' + args.container + ':' + version, shell=True)
+    subprocess.call('cd ' + buildDir + '/' + args.container + ' && docker build -t ' + repo + '/' + args.container + ':' + version + ' --no-cache .' , shell=True)
+    #subprocess.call('cd ' + buildDir + '/' + args.container + ' && docker build -t ' + repo + '/' + args.container + ':' + version + ' --no-cache . && docker push ' + repo + '/' + args.container + ':' + version, shell=True)
+    #subprocess.call('docker pull ' + repo + '/' + args.container + ':' + version, shell=True)
         
 def buildsub(containerType, buildDir, version):
     for basecontainer in configYaml['containers'][containerType].keys():
         if configYaml['containers'][containerType][basecontainer]:
             for subcontainer in configYaml['containers'][containerType][basecontainer]:
                 subcon = basecontainer  + '-' + subcontainer
-                subprocess.call('cd ' + buildDir + '/' + subcon + ' && docker build -t ' + repo + '/' + subcon + ':' + version + ' --no-cache .  && docker push ' + repo + '/' + subcon + ':' + version, shell=True)
-                subprocess.call('docker pull ' + repo + '/' + subcon + ':' + version, shell=True)
+                subprocess.call('cd ' + buildDir + '/' + subcon + ' && docker build -t ' + repo + '/' + subcon + ':' + version + ' --no-cache .', shell=True)
+                #subprocess.call('cd ' + buildDir + '/' + subcon + ' && docker build -t ' + repo + '/' + subcon + ':' + version + ' --no-cache .  && docker push ' + repo + '/' + subcon + ':' + version, shell=True)
+                #subprocess.call('docker pull ' + repo + '/' + subcon + ':' + version, shell=True)
              
 def buildservice(containerType, serviceType, buildDir, version):
     print 'cd ' + buildDir + '/' + serviceType
