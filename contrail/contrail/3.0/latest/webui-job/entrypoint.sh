@@ -26,8 +26,8 @@ if [ -n "$NEUTRON_SERVER" ]; then
     sed -i "s/config.networkManager.ip = '127.0.0.1';/config.networkManager.ip = '$NEUTRON_SERVER';/g" /etc/contrail/config.global.js
 fi
 
-if [ -n "$GLANCE_SERVER" ]; then
-    sed -i "s/config.imageManager.ip = '127.0.0.1';/config.imageManager.ip = '$GLANCE_SERVER';/g" /etc/contrail/config.global.js
+if [ -n "$GLANCE_API_SERVER" ]; then
+    sed -i "s/config.imageManager.ip = '127.0.0.1';/config.imageManager.ip = '$GLANCE_API_SERVER';/g" /etc/contrail/config.global.js
 fi
 
 if [ -n "$NOVA_SERVER" ]; then

@@ -5,6 +5,7 @@ MAINTAINER https://hub.docker.com/r/michaelhenkel
 #  nova-api \
 #  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN pip install python-openstackclient
+COPY entrypoint.sh /
 
 CMD ["/usr/bin/python","/usr/bin/nova-api"]
 

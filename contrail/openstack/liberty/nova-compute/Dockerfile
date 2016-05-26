@@ -38,10 +38,7 @@ RUN apt-get -qqy update && apt-get install -y --no-install-recommends \
   libguestfs-tools \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6839FE77
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4865D83
-RUN echo "deb http://ppa.launchpad.net/mhenkel-3/opencontrail/ubuntu trusty main" >> /etc/apt/sources.list
-RUN echo "deb http://ppa.launchpad.net/opencontrail/ppa/ubuntu trusty main" >> /etc/apt/sources.list
+RUN echo "deb http://10.87.64.33/contrail/ amd64/" >> /etc/apt/sources.list
 RUN apt-get -qqy update && apt-get install -y --force-yes --no-install-recommends \
   python-contrail \
   contrail-lib \
@@ -60,6 +57,6 @@ COPY entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["/usr/bin/python","/usr/bin/nova-compute","--config-file=/etc/nova/nova.conf","--config-file=/etc/nova/nova-compute.conf"]
+CMD ["/usr/bin/python","/usr/bin/nova-compute","--config-file=/etc/nova/nova.conf"]
 LABEL net.juniper.openstack=nova
 LABEL net.juniper.node=compute

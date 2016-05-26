@@ -1,0 +1,15 @@
+version: '2'
+networks:
+  undercloud:
+    external: true
+services:
+  redis:
+    image: michaelhenkel/redis:1.0
+    env_file: common.env
+    networks:
+    - undercloud
+  memcached:
+    image: michaelhenkel/memcached:1.0
+    env_file: common.env
+    networks:
+    - undercloud

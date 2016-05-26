@@ -11,7 +11,7 @@ if [ -n "$CASSANDRA_SERVER" ]; then
             CASSANDRA_SERVER_LIST=`echo $CASSANDRA_SERVER_LIST,$i:9160`
         fi
     done
-    sed -i "s/cassandra_server_list = 127.0.0.1:9160/cassandra_server_list = $CASSANDRA_SERVER_LIST/g" /etc/contrail/contrail-discovery.conf
+    ./openstack-config --set /etc/contrail/contrail-discovery.conf DEFAULTS cassandra_server_list $CASSANDRA_SERVER_LIST
 fi
 
 if [ -n "$ZOOKEEPER_SERVER" ]; then
@@ -24,7 +24,7 @@ if [ -n "$ZOOKEEPER_SERVER" ]; then
             ZOOKEEPER_SERVER_LIST=`echo $ZOOKEEPER_SERVER_LIST $i`
         fi
     done
-    sed -i "s/zk_server_ip=127.0.0.1/zk_server_ip = $ZOOKEEPER_SERVER_LIST/g" /etc/contrail/contrail-discovery.conf
+    ./openstack-config --set /etc/contrail/contrail-discovery.conf DEFAULTS zk_server_ip $ZOOKEEPER_SERVER_LIST
 fi
 
 exec "$@"

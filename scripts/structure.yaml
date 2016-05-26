@@ -1,5 +1,5 @@
 contrailversion: 3.0
-contrailbuild: 4fa727f
+contrailbuild: latest
 openstackversion: liberty
 commonversion: 1.0
 containerpath: /root/docker-opencontrail/contrail

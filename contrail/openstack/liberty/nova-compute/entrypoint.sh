@@ -1,10 +1,8 @@
 #!/bin/bash
-
-if [ -n "$HOST_IP" ]; then
-    ./openstack-config --set /etc/nova/nova.conf DEFAULT my_ip $HOST_IP
-fi
+myip=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+./openstack-config --set /etc/nova/nova.conf DEFAULT my_ip $myip
 if [ -n "$VNC_PROXY" ]; then
-    ./openstack-config --set /etc/nova/nova.conf DEFAULT vncserver_listen $VNC_PROXY
+    ./openstack-config --set /etc/nova/nova.conf DEFAULT vncserver_listen $myip
     ./openstack-config --set /etc/nova/nova.conf DEFAULT vncserver_proxyclient_address $VNC_PROXY
 fi
 if [ -n "$NEUTRON_SERVER" ]; then
@@ -21,7 +19,7 @@ if [ -n "$NEUTRON_SERVER" ]; then
 fi
 if [ -n "$KEYSTONE_SERVER" ]; then
     ./openstack-config --set /etc/nova/nova.conf DEFAULT auth_strategy keystone
-    ./openstack-config --set /etc/nova/nova.conf DEFAULT network_api_class nova_contrail_vif.contrailvif.ContrailNetworkAPI
+#    ./openstack-config --set /etc/nova/nova.conf DEFAULT network_api_class nova_contrail_vif.contrailvif.ContrailNetworkAPI
     ./openstack-config --del /etc/nova/nova.conf keystone_authtoken identity_uri
     ./openstack-config --del /etc/nova/nova.conf keystone_authtoken admin_tenant_name
     ./openstack-config --del /etc/nova/nova.conf keystone_authtoken admin_user
@@ -41,21 +39,17 @@ if [ -n "$RABBIT_SERVER" ]; then
     ./openstack-config --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_host $RABBIT_SERVER
     ./openstack-config --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_password guest
 fi
-if [ -n "$HOST_IP" ]; then
-    ./openstack-config --set /etc/nova/nova.conf DEFAULT my_ip $HOST_IP
-fi
 if [ -n "$MYSQL_SERVER" ]; then
     ./openstack-config --set /etc/nova/nova.conf database connection mysql://nova:$ADMIN_PASSWORD@$MYSQL_SERVER/nova
 fi
-if [ -n "$GLANCE_SERVER" ]; then
-    ./openstack-config --set /etc/nova/nova.conf glance host $GLANCE_SERVER
+if [ -n "$GLANCE_API_SERVER" ]; then
+    ./openstack-config --set /etc/nova/nova.conf glance host $GLANCE_API_SERVER
 fi
 ./openstack-config --set /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
-./openstack-config --set /etc/nova/nova-compute.conf DEFAULT compute_driver libvirt.LibvirtDriver
-./openstack-config --set /etc/nova/nova-compute.conf DEFAULT libvirt_vif_driver nova_contrail_vif.contrailvif.VRouterVIFDriver
-#./openstack-config --set /etc/nova/nova-compute.conf DEFAULT network_api_class nova_contrail_vif.contrailvif.ContrailNetworkAPI
-./openstack-config --set /etc/nova/nova-compute.conf DEFAULT network_api_class nova.network.neutronv2.api.API
-./openstack-config --set /etc/nova/nova-compute.conf libvirt virt_type kvm
-./openstack-config --set /etc/nova/nova-compute.conf libvirt connection_uri qemu+tcp://$HOST_IP/system
-./openstack-config --set /etc/nova/nova-compute.conf libvirt live_migration_uri qemu+tcp://$HOST_IP/system
+./openstack-config --set /etc/nova/nova.conf DEFAULT compute_driver libvirt.LibvirtDriver
+./openstack-config --set /etc/nova/nova.conf DEFAULT libvirt_vif_driver nova_contrail_vif.contrailvif.VRouterVIFDriver
+./openstack-config --set /etc/nova/nova.conf DEFAULT network_api_class nova.network.neutronv2.api.API
+./openstack-config --set /etc/nova/nova.conf libvirt virt_type kvm
+./openstack-config --set /etc/nova/nova.conf libvirt connection_uri qemu+tcp://$myip/system
+./openstack-config --set /etc/nova/nova.conf libvirt live_migration_uri qemu+tcp://$myip/system
 exec "$@"

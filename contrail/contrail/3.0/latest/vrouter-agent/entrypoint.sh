@@ -19,9 +19,10 @@ fi
 ./openstack-config --set /etc/contrail/contrail-vrouter-agent.conf VIRTUAL-HOST-INTERFACE physical_interface $PHYSICAL_INTERFACE
 ./openstack-config --set /etc/contrail/contrail-vrouter-agent.conf VIRTUAL-HOST-INTERFACE compute_node_address $HOST_IP
 
-if [ -n "$CREATE_MODULE" ]; then
+ls /lib/modules/`uname -r`/extra/net/vrouter/vrouter.ko
+if [ $? -ne 0 ]; then
   cd /usr/src/modules/contrail-vrouter
-  tar zxvf contrail-vrouter-3.0.tar.gz
+  tar zxvf contrail-vrouter-*.tar.gz
   grep "Red Hat Enterprise Linux Server release 7.1" /etc/redhat-release
   if [ $? -eq 0 ]; then
       cd /usr/bin
@@ -42,6 +43,10 @@ if [ -n "$CREATE_MODULE" ]; then
   else
       lsb_release -a |grep Ubuntu
       if [ $? -eq 0 ]; then
+          ls /usr/src/linux-headers-`uname -r`
+          if [ $? -ne 0 ]; then
+             apt-get install -y install linux-headers-`uname -r` linux-headers-`uname -r`-generic 
+          fi
           cd /usr/src/modules/contrail-vrouter
           make
           mkdir -p /lib/modules/`uname -r`/extra/net/vrouter

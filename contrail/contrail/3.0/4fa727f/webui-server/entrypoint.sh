@@ -22,6 +22,16 @@ AUTHN_URL = /v2.0/tokens
 EOF
 fi
 
+cat << EOF > /etc/contrail/contrail-webui-userauth.js
+var auth = {};
+auth.admin_user = '$ADMIN_USER';
+auth.admin_password = '$ADMIN_PASSWORD';
+auth.admin_token = '$ADMIN_TOKEN';
+auth.admin_tenant_name = '$ADMIN_TENANT';
+
+module.exports = auth;
+EOF
+
 if [ -n "$NEUTRON_SERVER" ]; then
     sed -i "s/config.networkManager.ip = '127.0.0.1';/config.networkManager.ip = '$NEUTRON_SERVER';/g" /etc/contrail/config.global.js
 fi
@@ -50,9 +60,9 @@ if [ -n "$ANALYTICS_API_SERVER" ]; then
     sed -i "s/config.analytics.server_ip = '127.0.0.1';/config.analytics.server_ip = '$ANALYTICS_API_SERVER';/g" /etc/contrail/config.global.js
 fi
 
-if [ -n "$WEBUI_SERVER" ]; then
-    sed -i "s/config.jobServer.server_ip = '127.0.0.1';/config.jobServer.server_ip = '$WEBUI_SERVER';/g" /etc/contrail/config.global.js
-fi
+#if [ -n "$WEBUI_SERVER" ]; then
+#    sed -i "s/config.jobServer.server_ip = '127.0.0.1';/config.jobServer.server_ip = '$WEBUI_SERVER';/g" /etc/contrail/config.global.js
+#fi
 
 if [ -n "$REDIS_SERVER" ]; then
     sed -i "s/config.redis_server_ip = '127.0.0.1';/config.redis_server_ip = '$REDIS_SERVER';/g" /etc/contrail/config.global.js

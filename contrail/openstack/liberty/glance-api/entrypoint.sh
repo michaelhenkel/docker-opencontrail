@@ -42,10 +42,10 @@ db_version=`glance-manage db_version`
 if [ $db_version -eq 0 ]; then
   glance-manage db_sync
 fi
-/usr/bin/python /usr/bin/glance-api &
-while ! nc -z localhost 9292; do
-  sleep 0.1
-done
+#/usr/bin/python /usr/bin/glance-api &
+#while ! nc -z localhost 9292; do
+#  sleep 0.1
+#done
 while ! nc -z $KEYSTONE_SERVER 35357; do
   sleep 0.1
 done
@@ -65,6 +65,6 @@ if [ $? -eq 1 ]; then
     --adminurl http://$GLANCE_API_SERVER:9292 \
     --internalurl http://$GLANCE_API_SERVER:9292
 fi
-kill -9 $(pidof python)
+#kill -9 $(pidof python)
 
 exec "$@"

@@ -1,7 +1,7 @@
 FROM ubuntu:14.04.3
 MAINTAINER mhenkel
 ENV DEBIAN_FRONTEND noninteractive
-RUN echo "deb http://10.87.64.23/contrail/3.0/latest/ amd64/" >> /etc/apt/sources.list
+RUN echo "deb http://10.87.64.33/contrail/ amd64/" >> /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install -y --force-yes linux-headers-`uname -r` \
      software-properties-common \

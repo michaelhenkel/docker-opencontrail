@@ -6,6 +6,6 @@ RUN echo "deb http://ppa.launchpad.net/mhenkel-3/opencontrail/ubuntu trusty main
 RUN echo "deb http://ppa.launchpad.net/opencontrail/ppa/ubuntu trusty main" >> /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install -y --force-yes contrail-utils python-contrail contrail-lib \
-     contrail-config contrail-config-openstack
-
+     contrail-config contrail-config-openstack python-iniparse
+COPY openstack-config /
 CMD ["/bin/sh"]

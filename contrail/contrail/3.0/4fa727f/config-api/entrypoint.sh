@@ -1,43 +1,22 @@
 #!/bin/bash
-
-sed -i "/\[DEFAULTS\]/a multi_tenancy = true" /etc/contrail/contrail-api.conf
-sed -i "/\[DEFAULTS\]/a auth = keystone" /etc/contrail/contrail-api.conf
-sed -i "/\[DEFAULTS\]/a listen_ip_addr = 0.0.0.0" /etc/contrail/contrail-api.conf
-sed -i "/\[DEFAULTS\]/a listen_port = 8082" /etc/contrail/contrail-api.conf
+touch /etc/contrail/contrail-keystone-auth.conf
+./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS multi_tenancy true
+./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS auth keystone
+./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS listen_ip_addr 0.0.0.0
+./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS listen_port 8082
+./openstack-config --set /etc/contrail/vnc_api_lib.ini auth AUTHN_SERVER $KEYSTONE_SERVER
 
 
 if [ -n "$KEYSTONE_SERVER" ]; then
-  cat << EOF > /etc/contrail/contrail-keystone-auth.conf
-[KEYSTONE]
-auth_host=$KEYSTONE_SERVER
-auth_protocol=http
-auth_port=35357
-admin_user=$ADMIN_USER
-admin_password=$ADMIN_PASSWORD
-admin_token=$ADMIN_TOKEN
-admin_tenant_name=$ADMIN_TENANT
-insecure=false
-memcache_servers=$MEMCACHED_SERVER:11211
-EOF
-
-  cat << EOF > /etc/contrail/vnc_api_lib.ini
-[global]
-;WEB_SERVER = 127.0.0.1
-;WEB_PORT = 9696  ; connection through quantum plugin
-
-WEB_SERVER = 127.0.0.1
-WEB_PORT = 8082 ; connection to api-server directly
-BASE_URL = /
-;BASE_URL = /tenants/infra ; common-prefix for all URLs
-
-; Authentication settings (optional)
-[auth]
-AUTHN_TYPE = keystone
-AUTHN_PROTOCOL = http
-AUTHN_SERVER=$KEYSTONE_SERVER
-AUTHN_PORT = 35357
-AUTHN_URL = /v2.0/tokens
-EOF
+  ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE auth_host $KEYSTONE_SERVER
+  ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE auth_protocol http
+  ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE auth_port 35357
+  ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE admin_user $ADMIN_USER
+  ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE admin_password $ADMIN_PASSWORD
+  ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE admin_token $ADMIN_TOKEN
+  ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE admin_tenant_name $ADMIN_TENANT
+  ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE insecure false
+  ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE memcache_servers $MEMCACHED_SERVER:11211
 fi
 
 if [ -n "$CASSANDRA_SERVER" ]; then
@@ -50,21 +29,32 @@ if [ -n "$CASSANDRA_SERVER" ]; then
             CASSANDRA_SERVER_LIST=`echo $CASSANDRA_SERVER_LIST,$i:9160`
         fi
     done
-    sed -i "s/cassandra_server_list = 127.0.0.1:9160/cassandra_server_list = $CASSANDRA_SERVER_LIST/g" /etc/contrail/contrail-api.conf
+    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS cassandra_server_list $CASSANDRA_SERVER_LIST
 fi
 
 if [ -n "$DISCOVERY_SERVER" ]; then
-    sed -i "s/disc_server_ip = 127.0.0.1/disc_server_ip = $DISCOVERY_SERVER/g" /etc/contrail/contrail-api.conf
+    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS disc_server_ip $DISCOVERY_SERVER
 fi
 
 if [ -n "$RABBIT_SERVER" ]; then
-    sed -i "/\[DEFAULTS\]/a rabbit_server = $RABBIT_SERVER" /etc/contrail/contrail-api.conf
+    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS rabbit_server $RABBIT_SERVER
+fi
+
+if [ -n "$REDIS_SERVER" ]; then
+    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS redis_server_ip $REDIS_SERVER
 fi
 
 if [ -n "$IFMAP_SERVER" ]; then
-    sed -i "/\[DEFAULTS\]/a ifmap_password = api-server" /etc/contrail/contrail-api.conf
-    sed -i "/\[DEFAULTS\]/a ifmap_username = api-server" /etc/contrail/contrail-api.conf
-    sed -i "/\[DEFAULTS\]/a ifmap_server_ip = $IFMAP_SERVER" /etc/contrail/contrail-api.conf
+    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS ifmap_password api-server
+    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS ifmap_username api-server
+    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS ifmap_server_ip $IFMAP_SERVER
+fi
+if [ -n "$IFMAP_USER" ]; then
+    IFS=',' read -ra NODE <<< "$IFMAP_USER"
+    for i in "${NODE[@]}";do
+        echo $i:$i >> /etc/ifmap-server/basicauthusers.properties
+        echo $i.dns:$i.dns >> /etc/ifmap-server/basicauthusers.properties
+    done
 fi
 
 if [ -n "$ZOOKEEPER_SERVER" ]; then
@@ -77,7 +67,7 @@ if [ -n "$ZOOKEEPER_SERVER" ]; then
             ZOOKEEPER_SERVER_LIST=`echo $ZOOKEEPER_SERVER_LIST $i:2181`
         fi
     done
-    sed -i "/\[DEFAULTS\]/a zk_server_ip = $ZOOKEEPER_SERVER_LIST" /etc/contrail/contrail-api.conf
+    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS zk_server_ip $ZOOKEEPER_SERVER_LIST
 fi
 
 exec "$@"

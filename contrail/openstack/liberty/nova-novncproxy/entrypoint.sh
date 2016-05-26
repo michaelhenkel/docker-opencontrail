@@ -1,44 +1,37 @@
 #!/bin/bash
 
-if [ -n "$HOST_IP" ]; then
-    echo "my_ip = $HOST_IP" >> /etc/nova/nova.conf
-fi
-if [ -n "$VNC_PROXY" ]; then
-    echo "vncserver_listen = $VNC_PROXY" >> /etc/nova/nova.conf
-    echo "vncserver_proxyclient_address = $VNC_PROXY" >> /etc/nova/nova.conf
-fi
-if [ -n "$KEYSTONE_SERVER" ]; then
-    echo "auth_strategy = keystone" >> /etc/nova/nova.conf
-fi
-if [ -n "$RABBIT_SERVER" ]; then
-    echo "rpc_backend = rabbit" >> /etc/nova/nova.conf
-fi
-if [ -n "$HOST_IP" ]; then
-    echo "my_ip = $HOST_IP" >> /etc/nova/nova.conf
-fi
-if [ -n "$KEYSTONE_SERVER" ]; then
-    echo "[keystone_authtoken]" >> /etc/nova/nova.conf
-    echo "auth_uri = http://$KEYSTONE_SERVER:5000" >> /etc/nova/nova.conf
-    echo "auth_url = http://$KEYSTONE_SERVER:35357" >> /etc/nova/nova.conf
-    echo "auth_plugin = password" >> /etc/nova/nova.conf
-    echo "project_domain_id = default" >> /etc/nova/nova.conf
-    echo "user_domain_id = default" >> /etc/nova/nova.conf
-    echo "project_name = service" >> /etc/nova/nova.conf
-    echo "username = nova" >> /etc/nova/nova.conf
-    echo "password = $ADMIN_PASSWORD" >> /etc/nova/nova.conf
-fi
-if [ -n "$RABBIT_SERVER" ]; then
-    echo "[oslo_messaging_rabbit]" >> /etc/nova/nova.conf
-    echo "rabbit_host = $RABBIT_SERVER" >> /etc/nova/nova.conf
-    echo "rabbit_password = guest" >> /etc/nova/nova.conf
-fi
-if [ -n "$MYSQL_SERVER" ]; then
-    echo "[database]" >> /etc/nova/nova.conf
-    echo "connection = mysql://nova:$ADMIN_PASSWORD@$MYSQL_SERVER/nova" >> /etc/nova/nova.conf
-fi
-if [ -n "$GLANCE_SERVER" ]; then
-    echo "[glance]" >> /etc/nova/nova.conf
-    echo "host = $GLANCE_SERVER" >> /etc/nova/nova.conf
-fi
+myip=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+./openstack-config --set /etc/nova/nova.conf DEFAULT glance_api_servers http://$GLANCE_API_SERVER:9292
+./openstack-config --set /etc/nova/nova.conf DEFAULT memcached_servers $MEMCACHED_SERVER:11211
+./openstack-config --set /etc/nova/nova.conf DEFAULT novncproxy_host $myip
+./openstack-config --set /etc/nova/nova.conf DEFAULT network_api_class nova.network.neutronv2.api.API
+./openstack-config --set /etc/nova/nova.conf DEFAULT firewall_driver nova.virt.firewall.NoopFirewallDriver
+./openstack-config --set /etc/nova/nova.conf DEFAULT auth_strategy keystone
+./openstack-config --set /etc/nova/nova.conf DEFAULT rpc_backend rabbit
+./openstack-config --set /etc/nova/nova.conf vnc novncproxy_base_url http://$myip:5999/vnc_auto.html
+./openstack-config --set /etc/nova/nova.conf vnc vncserver_listen $VNC_PROXY
+./openstack-config --set /etc/nova/nova.conf vnc vncserver_proxyclient_address $VNC_PROXY
+./openstack-config --set /etc/nova/nova.conf database connection mysql://nova:$ADMIN_PASSWORD@$MYSQL_SERVER/nova
+./openstack-config --set /etc/nova/nova.conf neutron service_metadata_proxy True
+./openstack-config --set /etc/nova/nova.conf neutron auth_strategy keystone
+./openstack-config --set /etc/nova/nova.conf neutron url http://$NEUTRON_SERVER:9696
+./openstack-config --set /etc/nova/nova.conf neutron url_timeout 30
+./openstack-config --set /etc/nova/nova.conf neutron admin_tenant_name service
+./openstack-config --set /etc/nova/nova.conf neutron default_tenant_id default
+./openstack-config --set /etc/nova/nova.conf neutron region_name RegionOne
+./openstack-config --set /etc/nova/nova.conf neutron admin_username neutron
+./openstack-config --set /etc/nova/nova.conf neutron admin_password contrail123
+./openstack-config --set /etc/nova/nova.conf neutron admin_auth_url http://$KEYSTONE_SERVER:35357/v2.0
+./openstack-config --set /etc/nova/nova.conf keystone_authtoken auth_uri http://$KEYSTONE_SERVER:5000/
+./openstack-config --set /etc/nova/nova.conf keystone_authtoken auth_url http://$KEYSTONE_SERVER:35357
+./openstack-config --set /etc/nova/nova.conf keystone_authtoken auth_plugin password
+./openstack-config --set /etc/nova/nova.conf keystone_authtoken project_domain_id default
+./openstack-config --set /etc/nova/nova.conf keystone_authtoken user_domain_id default
+./openstack-config --set /etc/nova/nova.conf keystone_authtoken project_name service
+./openstack-config --set /etc/nova/nova.conf keystone_authtoken username nova
+./openstack-config --set /etc/nova/nova.conf keystone_authtoken password contrail123
+./openstack-config --set /etc/nova/nova.conf glance host $GLANCE_API_SERVER
+./openstack-config --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_host $RABBIT_SERVER
+./openstack-config --set /etc/nova/nova.conf oslo_messaging_rabbit rabbit_password guest
 
 exec "$@"
