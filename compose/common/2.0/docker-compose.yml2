@@ -1,0 +1,270 @@
+version: '2'
+networks:
+  undercloud:
+    external: true
+services:
+  redis:
+    image: michaelhenkel/redis:1.0
+    env_file: common.env
+    networks:
+    - undercloud
+  rabbitmq:
+    image: michaelhenkel/rabbitmq:1.0
+    env_file: common.env
+    networks:
+    - undercloud
+  memcached:
+    image: michaelhenkel/memcached:1.0
+    env_file: common.env
+    networks:
+    - undercloud
+  mariadb:
+    volumes:
+      - /var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    image: michaelhenkel/mariadb:1.0
+    env_file: common.env
+    ports:
+      - 3306:3306
+    networks:
+    - undercloud
+  keystone:
+    image: michaelhenkel/keystone:liberty
+    env_file: common.env
+    ports:
+      - 5000:5000
+      - 35357:35357
+    networks:
+      - undercloud
+    depends_on:
+      - mariadb
+    links:
+      - mariadb
+  glance-api:
+    image: michaelhenkel/glance-api:liberty
+    env_file: common.env
+    ports:
+      - 9292:9292
+    networks:
+      - undercloud
+    depends_on:
+      - mariadb
+    links:
+      - mariadb
+      - keystone
+  glance-registry:
+    image: michaelhenkel/glance-registry:liberty
+    env_file: common.env
+    ports:
+      - 9191:9191
+    networks:
+      - undercloud
+    depends_on:
+      - mariadb
+    links:
+      - glance-api
+      - mariadb
+      - keystone
+  nova-api:
+    cap_add:
+    - NET_ADMIN
+    image: michaelhenkel/nova-api:liberty
+    networks: 
+    - undercloud
+    ports:
+    - 8773:8773
+    - 8774:8774
+    - 8775:8775
+    env_file: common.env
+  nova-cert:
+    image: michaelhenkel/nova-cert:liberty
+    networks:
+    - undercloud
+    env_file: common.env
+  nova-conductor:
+    image: michaelhenkel/nova-conductor:liberty
+    networks:
+    - undercloud
+    env_file: common.env
+  nova-consoleauth:
+    image: michaelhenkel/nova-consoleauth:liberty
+    networks:
+    - undercloud
+    env_file: common.env
+  nova-novncproxy:
+    image: michaelhenkel/nova-novncproxy:liberty
+    networks:
+    - undercloud
+    env_file: common.env
+  nova-scheduler:
+    image: michaelhenkel/nova-scheduler:liberty
+    networks:
+    - undercloud
+    env_file: common.env
+  neutron-server:
+    image: michaelhenkel/neutron-server:liberty
+    env_file: common.env
+    ports:
+      - 9696:9696
+    networks:
+      - undercloud
+  cassandra:
+    image: michaelhenkel/cassandra:1.0
+    networks:
+    - undercloud
+    ports:
+    - 9160:9160
+    - 7000:7000
+    - 39470:39470
+    - 9042:9042
+    - 42590:42590
+    - 7199:7199
+    env_file: common.env
+    volumes:
+     - /var/lib/cassandra/data
+  zookeeper:
+    image: michaelhenkel/zookeeper:1.0
+    networks:
+    - undercloud
+    ports:
+    - 2181:2181
+    - 33366:33366
+    env_file: common.env
+    volumes:
+      - /var/lib/zookeeper
+  config-api:
+    image: michaelhenkel/config-api:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 8082:8082
+    - 8084:8084
+    - 8095:8095
+    - 8443:8443
+    - 8444:8444
+    env_file: common.env
+  config-device-manager:
+    image: michaelhenkel/config-device-manager:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 8096:8096
+    env_file: common.env
+  contrail-discovery:
+    image: michaelhenkel/config-discovery:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 5997:5997
+    - 5998:5998
+    env_file: common.env
+  config-schema:
+    image: michaelhenkel/config-schema:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 8087:8087
+    env_file: common.env
+  config-svc-monitor:
+    image: michaelhenkel/config-svc-monitor:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 8088:8088
+    env_file: common.env
+  #ifmap:
+  # image: michaelhenkel/ifmap-server:3.0-4fa727f
+  # networks:
+  # - undercloud
+  # ports:
+  # - 8443:8443
+  # - 8444:8444
+  # env_file: common.env
+  analytics-alarm:
+    image: michaelhenkel/analytics-alarm:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 5995:5995
+    env_file: common.env
+  analytics-api:
+    image: michaelhenkel/analytics-api:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 8081:8081
+    - 8090:8090
+    env_file: common.env
+  analytics-collector:
+    image: michaelhenkel/analytics-collector:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 8086:8086
+    - 8089:8089
+    env_file: common.env
+  analytics-query:
+    image: michaelhenkel/analytics-query:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 8091:8091
+    env_file: common.env
+  analytics-snmp:
+    image: michaelhenkel/analytics-snmp:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 5920:5920
+    env_file: common.env
+  analytics-topology:
+    image: michaelhenkel/analytics-topology:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 5921:5921 
+    env_file: common.env
+  control-control:
+    image: michaelhenkel/control-control:3.0-4fa727f
+    networks:
+    - undercloud
+    env_file: common.env
+#  control-dns:
+#    depends_on:
+#      - control-named
+#    pid: host
+#    privileged: true
+#    volumes_from:
+#      - control-named
+#    cap_add:
+#      - ALL
+#    image: michaelhenkel/control-dns:3.0-4fa727f
+#    networks:
+#    - undercloud
+#    env_file: common.env
+  control-named:
+    volumes:
+      - /etc/contrail
+    pid: host
+    privileged: true
+    image: michaelhenkel/control-named:3.0-4fa727f
+    networks:
+    - undercloud
+    env_file: common.env
+  #webui-job:
+  #  image: michaelhenkel/webui-job:3.0-4fa727f
+  #  networks:
+  #  - undercloud
+  #  ports:
+  #  - 3002:3002
+  #  env_file: common.env
+  webui-server:
+    image: michaelhenkel/webui-server:3.0-4fa727f
+    networks:
+    - undercloud
+    ports:
+    - 8143:8143
+    - 8080:8080
+    - 3000:3000
+    - 3002:3002
+    env_file: common.env

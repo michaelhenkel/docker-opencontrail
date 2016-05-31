@@ -121,7 +121,7 @@ services:
     volumes:
       - /var/lib/zookeeper
   config-api:
-    image: michaelhenkel/config-api:3.0-latest
+    image: michaelhenkel/config-api:3.1.0.0-2733
     network_mode: "host"
     
     ports:
@@ -132,14 +132,14 @@ services:
     - 8444:8444
     env_file: common.env
   config-device-manager:
-    image: michaelhenkel/config-device-manager:3.0-latest
+    image: michaelhenkel/config-device-manager:3.1.0.0-2733
     network_mode: "host"
     
     ports:
     - 8096:8096
     env_file: common.env
   contrail-discovery:
-    image: michaelhenkel/config-discovery:3.0-latest
+    image: michaelhenkel/config-discovery:3.1.0.0-2733
     network_mode: "host"
     
     ports:
@@ -147,21 +147,21 @@ services:
     - 5998:5998
     env_file: common.env
   config-schema:
-    image: michaelhenkel/config-schema:3.0-latest
+    image: michaelhenkel/config-schema:3.1.0.0-2733
     network_mode: "host"
     
     ports:
     - 8087:8087
     env_file: common.env
   config-svc-monitor:
-    image: michaelhenkel/config-svc-monitor:3.0-latest
+    image: michaelhenkel/config-svc-monitor:3.1.0.0-2733
     network_mode: "host"
     
     ports:
     - 8088:8088
     env_file: common.env
   #ifmap:
-  # image: michaelhenkel/ifmap-server:3.0-latest
+  # image: michaelhenkel/ifmap-server:3.1.0.0-2733
   # network_mode: "host"
   # 
   # ports:
@@ -169,45 +169,45 @@ services:
   # - 8444:8444
   # env_file: common.env
   analytics-alarm:
-    image: michaelhenkel/analytics-alarm:3.0-latest
+    image: michaelhenkel/analytics-alarm:3.1.0.0-2733
     network_mode: "host"
     ports:
     - 5995:5995
     env_file: common.env
   analytics-api:
-    image: michaelhenkel/analytics-api:3.0-latest
+    image: michaelhenkel/analytics-api:3.1.0.0-2733
     network_mode: "host"
     ports:
     - 8081:8081
     - 8090:8090
     env_file: common.env
   analytics-collector:
-    image: michaelhenkel/analytics-collector:3.0-latest
+    image: michaelhenkel/analytics-collector:3.1.0.0-2733
     network_mode: "host"
     ports:
     - 8086:8086
     - 8089:8089
     env_file: common.env
   analytics-query:
-    image: michaelhenkel/analytics-query:3.0-latest
+    image: michaelhenkel/analytics-query:3.1.0.0-2733
     network_mode: "host"
     ports:
     - 8091:8091
     env_file: common.env
   analytics-snmp:
-    image: michaelhenkel/analytics-snmp:3.0-latest
+    image: michaelhenkel/analytics-snmp:3.1.0.0-2733
     network_mode: "host"
     ports:
     - 5920:5920
     env_file: common.env
   analytics-topology:
-    image: michaelhenkel/analytics-topology:3.0-latest
+    image: michaelhenkel/analytics-topology:3.1.0.0-2733
     network_mode: "host"
     ports:
     - 5921:5921 
     env_file: common.env
   control-control:
-    image: michaelhenkel/control-control:3.0-latest
+    image: michaelhenkel/control-control:3.1.0.0-2733
     network_mode: "host"
     
     env_file: common.env
@@ -220,7 +220,7 @@ services:
 #      - control-named
 #    cap_add:
 #      - ALL
-#    image: michaelhenkel/control-dns:3.0-latest
+#    image: michaelhenkel/control-dns:3.1.0.0-2733
 #    network_mode: "host"
 #    
 #    env_file: common.env
@@ -229,12 +229,12 @@ services:
       - /etc/contrail
     pid: host
     privileged: true
-    image: michaelhenkel/control-named:3.0-latest
+    image: michaelhenkel/control-named:3.1.0.0-2733
     network_mode: "host"
     
     env_file: common.env
   #webui-job:
-  #  image: michaelhenkel/webui-job:3.0-latest
+  #  image: michaelhenkel/webui-job:3.1.0.0-2733
   #  network_mode: "host"
   #  
   #  ports:

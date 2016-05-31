@@ -1,5 +1,6 @@
 FROM michaelhenkel/openstackbase:liberty
 MAINTAINER https://hub.docker.com/r/michaelhenkel
+RUN sed -i "s/archive.ubuntu.com/us.archive.ubuntu.com/g" /etc/apt/sources.list
 RUN apt-get -qqy update && apt-get install -y --force-yes --no-install-recommends \
   patch \
   mysql-client \

@@ -1,5 +1,5 @@
-contrailversion: 3.0
-contrailbuild: latest
+contrailversion: 3.1.0.0
+contrailbuild: 2733
 openstackversion: liberty
 commonversion: 1.0
 containerpath: /root/docker-opencontrail/contrail
@@ -47,7 +47,7 @@ containers:
       - server
     ifmap:
     vrouter-agent:
-    opencontrail-docker-libnetwork:
+#    opencontrail-docker-libnetwork:
   common:
     mariadb:
     cassandra:

@@ -26,5 +26,7 @@ COPY rhel-vrouter/vrouter.ko /rhel-vrouter/vrouter.ko
 COPY entrypoint.sh /
 COPY openstack-config /
 COPY vrouter-functions.sh /
+COPY consule-template /usr/bin
+RUN mkdir /etc/consul-templates
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/bin/contrail-vrouter-agent"]
