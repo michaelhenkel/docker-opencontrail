@@ -38,7 +38,10 @@ RUN apt-get -qqy update && apt-get install -y --no-install-recommends \
   libguestfs-tools \
   && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN echo "deb http://10.87.64.33/contrail/ amd64/" >> /etc/apt/sources.list
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6839FE77
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4865D83
+RUN echo "deb http://ppa.launchpad.net/mhenkel-3/opencontrail/ubuntu trusty main" >> /etc/apt/sources.list
+RUN echo "deb http://ppa.launchpad.net/opencontrail/ppa/ubuntu trusty main" >> /etc/apt/sources.list
 RUN apt-get -qqy update && apt-get install -y --force-yes --no-install-recommends \
   python-contrail \
   contrail-lib \
@@ -49,11 +52,6 @@ LABEL net.juniper.node=controler
 
 COPY openstack-config /
 COPY entrypoint.sh /
-
-#RUN sed -i 's/return cls(skip_policy_check=skip_policy_check)/return cls()/g' /usr/lib/python2.7/dist-packages/nova/network/__init__.py
-#RUN sed -i 's/from nova.openstack.common import log as logging/from oslo_log import log as logging/g' /usr/lib/python2.7/dist-packages/nova_contrail_vif/contrailvif.py
-#RUN sed -i 's/from nova.openstack.common import processutils/from oslo_concurrency import processutils/g' /usr/lib/python2.7/dist-packages/nova_contrail_vif/contrailvif.py
-#RUN sed -i 's/super(VRouterVIFDriver, self).__init__(get_connection)/super(VRouterVIFDriver, self).__init__()/g' /usr/lib/python2.7/dist-packages/nova_contrail_vif/contrailvif.py
 
 ENTRYPOINT ["/entrypoint.sh"]
 

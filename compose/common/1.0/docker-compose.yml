@@ -241,7 +241,7 @@ services:
   #  - 3002:3002
   #  env_file: common.env
   webui-server:
-    image: michaelhenkel/webui-server:3.0-latest
+    image: michaelhenkel/webui-server:3.1.0.0-2733
     network_mode: "host"
     
     ports:

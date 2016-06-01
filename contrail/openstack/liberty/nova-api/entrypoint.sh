@@ -46,7 +46,7 @@ if [ $? -eq 1 ]; then
         IDENTIFIED BY '$ADMIN_PASSWORD';"
 fi
 db_version=`nova-manage db version`
-if [ $db_version -eq 0 ]; then
+if [ $db_version -eq 215 ]; then
   nova-manage db sync
 fi
 #/usr/bin/python /usr/bin/nova-api &
