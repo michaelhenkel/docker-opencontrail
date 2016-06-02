@@ -20,7 +20,6 @@ if [ -n "$DISCOVERY_SERVER" ]; then
 fi
 
 myip=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
-sed -i "/\[DEFAULT\]/a hostip = $myip" /etc/contrail/contrail-control.conf
 ./openstack-config --set /etc/contrail/contrail-control.conf DEFAULT hostip $myip
 
 if [ -n "$IFMAP_USER" ]; then

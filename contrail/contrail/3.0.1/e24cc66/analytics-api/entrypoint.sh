@@ -21,9 +21,9 @@ if [ -n "$DISCOVERY_SERVER" ]; then
     ./openstack-config --set /etc/contrail/contrail-analytics-api.conf DISCOVERY disc_server_ip $DISCOVERY_SERVER
 fi
 
-if [ -n "$REDIS_SERVER" ]; then
-    sed -i "/\[REDIS\]/a server = $REDIS_SERVER" /etc/contrail/contrail-analytics-api.conf
-    ./openstack-config --set /etc/contrail/contrail-analytics-api.conf REDIS server $REDIS_SERVER
+if [ -n "$ANALYTICS_REDIS_SERVER" ]; then
+    sed -i "/\[REDIS\]/a server = $ANALYTICS_REDIS_SERVER" /etc/contrail/contrail-analytics-api.conf
+    ./openstack-config --set /etc/contrail/contrail-analytics-api.conf REDIS server $ANALYTICS_REDIS_SERVER
 fi
 
 if [ -n "$CASSANDRA_SERVER" ]; then

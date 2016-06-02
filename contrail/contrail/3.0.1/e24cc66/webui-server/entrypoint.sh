@@ -40,8 +40,8 @@ if [ -n "$GLANCE_API_SERVER" ]; then
     sed -i "s/config.imageManager.ip = '127.0.0.1';/config.imageManager.ip = '$GLANCE_API_SERVER';/g" /etc/contrail/config.global.js
 fi
 
-if [ -n "$NOVA_SERVER" ]; then
-    sed -i "s/config.computeManager.ip = '127.0.0.1';/config.computeManager.ip = '$NOVA_SERVER';/g" /etc/contrail/config.global.js
+if [ -n "$NOVA_API_SERVER" ]; then
+    sed -i "s/config.computeManager.ip = '127.0.0.1';/config.computeManager.ip = '$NOVA_API_SERVER';/g" /etc/contrail/config.global.js
 fi
 
 if [ -n "$KEYSTONE_SERVER" ]; then

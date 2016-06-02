@@ -1,0 +1,44 @@
+version: '2'
+networks:
+  default:
+    external:
+      name: undercloud
+services:
+  analytics:
+    image: michaelhenkel/network:1.0
+    ports:
+    - 5995:5995
+    - 8081:8081
+    - 8090:8090
+    - 8086:8086
+    - 8089:8089
+    - 5920:5920
+    - 5921:5921
+  analytics-alarm:
+    image: michaelhenkel/analytics-alarm:3.0.1-e24cc66
+    network_mode: "service:analytics"
+    env_file: common.env
+  analytics-api:
+    image: michaelhenkel/analytics-api:3.0.1-e24cc66
+    network_mode: "service:analytics"
+    env_file: common.env
+  analytics-collector:
+    image: michaelhenkel/analytics-collector:3.0.1-e24cc66
+    network_mode: "service:analytics"
+    env_file: common.env
+  analytics-query:
+    image: michaelhenkel/analytics-query:3.0.1-e24cc66
+    network_mode: "service:analytics"
+    env_file: common.env
+  analytics-snmp:
+    image: michaelhenkel/analytics-snmp:3.0.1-e24cc66
+    network_mode: "service:analytics"
+    env_file: common.env
+  analytics-topology:
+    image: michaelhenkel/analytics-topology:3.0.1-e24cc66
+    network_mode: "service:analytics"
+    env_file: common.env
+  analytics-redis:
+    image: michaelhenkel/redis:1.0
+    network_mode: "service:analytics"
+    env_file: common.env

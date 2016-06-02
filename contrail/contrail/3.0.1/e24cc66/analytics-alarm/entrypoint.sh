@@ -47,8 +47,8 @@ if [ -n "$ZOOKEEPER_SERVER" ]; then
     ./openstack-config --set /etc/contrail/contrail-alarm-gen.conf DEFAULTS kafka_broker_list $KAFKA_SERVER_LIST
 fi
 
-if [ -n "$REDIS_SERVER" ]; then
-    ./openstack-config --set /etc/contrail/contrail-alarm-gen.conf REDIS redis_server_ip $REDIS_SERVER
+if [ -n "$ANALYTICS_REDIS_SERVER" ]; then
+    ./openstack-config --set /etc/contrail/contrail-alarm-gen.conf REDIS redis_server_ip $ANALYTICS_REDIS_SERVER
 fi
 
 

@@ -61,9 +61,9 @@ fi
 myip=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
 ./openstack-config --set /etc/contrail/contrail-collector.conf DEFAULT hostip $myip
 
-if [ -n "$REDIS_SERVER" ]; then
-    sed -i "/\[REDIS\]/a server = $REDIS_SERVER" /etc/contrail/contrail-collector.conf
-    ./openstack-config --set /etc/contrail/contrail-collector.conf REDIS server $REDIS_SERVER
+if [ -n "$ANALYTICS_REDIS_SERVER" ]; then
+    sed -i "/\[REDIS\]/a server = $ANALYTICS_REDIS_SERVER" /etc/contrail/contrail-collector.conf
+    ./openstack-config --set /etc/contrail/contrail-collector.conf REDIS server $ANALYTICS_REDIS_SERVER
 fi
 
 exec "$@"
