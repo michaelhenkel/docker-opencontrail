@@ -45,7 +45,7 @@ if [ $? -ne 0 ]; then
       if [ $? -eq 0 ]; then
           ls /usr/src/linux-headers-`uname -r`
           if [ $? -ne 0 ]; then
-             apt-get install -y install linux-headers-`uname -r` linux-headers-`uname -r`-generic 
+             apt-get install -y linux-headers-`uname -r`
           fi
           cd /usr/src/modules/contrail-vrouter
           make
