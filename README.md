@@ -9,13 +9,15 @@ which run both inside the same container using supervisord as the init system.
 # Components  
   OpenStack and OpenContrail require a number of components which can be grouped together:
 
-  - Common (components shared between OpenStack and OpenContrail)  
+  - Common
     - Keystone
     - RabbitMQ
     - Redis
     - Memcached  
+    - Cassandra
+    - Zookeeper/Kafka
 
-  - OpenStack (components required by OpenStack)
+  - OpenStack
     - Nova  
       - api
       - cert
@@ -24,8 +26,7 @@ which run both inside the same container using supervisord as the init system.
       - consoleauth
       - scheduler
       - novncproxy
-    - Neutron
-      - server
+    - Neutron-server
     - Cinder
       - api
       - scheduler
@@ -34,11 +35,7 @@ which run both inside the same container using supervisord as the init system.
       - api
     - Libvirt
 
-  - OpenContrail (components required by OpenContrail)
-    - Database
-      - cassandra
-      - zookeeper
-      - kafka
+  - OpenContrail
     - Config
       - api
       - scv-monitor
@@ -67,6 +64,50 @@ nova-api and nova-compute containers. Those need OpenContrail libraries installe
 All other OpenStack related containers are off the shelf.  
 Docker allows to apply arbitray labels to images as some sort of metadata which  
 makes it easy to use the above structure to identify container groupings.  
+
+# Architecture    
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+    
+|                                                                                                                                                                                                                    |    
+|                                                                                                                                                                            +-------------+                         |    
+|                                                                                                                                                                            |             |                         |    
+|                                                                                                                                                                            | +-----+     |                         |    
+|                                                                                     +---------------+                                                                      | |redis|     |                         |    
+|                                                                                     |               |                                                                      | +-----+     |                         |    
+|                                                                                     | +---+         |                                                                      | +---+       |                         |    
+|                                                                                     | |api|         |                                                 +------------------+ | |api|       |                         |    
+|                                                                                     | +---+         |                                                 |                  | | +---+       |                         |    
+|                                                                                     | +----+        |                                                 | +---+            | | +---------+ |                         |    
+|                                                                                     | |cert|        |                                                 | |api|            | | |collector| |                         |    
+|                                                                                     | +----+        |                                                 | +---+            | | +---------+ |                         |    
+|                                                                                     | +--------+    |                                                 | +-----------+    | | +-----+     |                         |    
+|                                                                                     | |schedule|    |                                                 | |svc|monitor|    | | |alarm|     |                         |    
+|                                                                                     | +--------+    |                                                 | +-----------+    | | +-----+     |                         |    
+|                                                                                     | +---------+   |                                                 | +--------------+ | | +-----+     |                         |    
+|                                                                                     | |conductor|   | +-------------+ +------------+                  | |device|manager| | | |query|     | +-------------+         |    
+|                                                                                     | +---------+   | |             | |            |                  | +--------------+ | | +-----+     | |             |         |    
+|                                                                                     | +----------+  | | +---+       | | +---+      |                  | +------+         | | +----+      | | +-------+   |         |    
+|                                                                                     | |novncproxy|  | | |api|       | | |api|      |                  | |schema|         | | |snmp|      | | |control|   |         |    
+|                                                                                     | +----------+  | | +---+       | | +---+      |                  | +------+         | | +----+      | | +-------+   |         |    
+|                                                                                     | +-----------+ | | +---------+ | | +--------+ |                  | +---------+      | | +--------+  | | +---------+ |         |    
+|                                                                                     | |consoleauth| | | |scheduler| | | |registry| |                  | |discovery|      | | |topology|  | | |named/dns| |         |    
+|                                                                                     | +-----------+ | | +---------+ | | +--------+ |                  | +---------+      | | +--------+  | | +---------+ |         |    
+|                                                                                     |               | |             | |            |                  |                  | |             | |             |         |    
+|  +---------------+ +-----+ +--------+ +--------+ +---------+ +---------+ +--------+ |   nova        | |   cinder    | |   glance   | +--------------+ |  config          | |  analytics  | |  control    | +-----+ |    
+|  |zookeeper/kafka| |redis| |rabbitmq| |keystone| |memcached| |cassandra| | mariadb| |               | |             | |            | |neutron|server| |                  | |             | |             | |webui| |    
+|  +---------------+ +-----+ +--------+ +--------+ +---------+ +---------+ +--------+ +---------------+ +-------------+ +------------+ +--------------+ +------------------+ +-------------+ +-------------+ +-----+ |    
+|           |           |        |          |           |          |           |             |                 |              |               |                  |              |   |            |   |          |    |    
+|           |           |        |          |           |          |           |             |                 |              |               |                  |           +-----------------------------+    |    |    
+|           |           |        |          |           |          |           |             |                 |              |               |                  |           |  extNw MACVLAN 10.0.0.128/28|    |    |    
+|           |           |        |          |           |          |           |             |                 |              |               |                  |           +-----------------------------+    |    |    
+|           |           |        |          |           |          |           |             |                 |              |               |                  |              |         |      |              |    |    
+| +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+ |    
+| |                                                                                             intNw Overlay 172.16.0.0/16                                                                                        | |    
+| +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+ |    
+|                                                                                                 |                                                                                       |                          |    
+|                                                                                          +----------------------------------------------------------------------------------------------+                          |    
+|                                                                                          | eth0 10.0.0.1 |                                                                                                         |    
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+    
 
 
 This label filter shows all OpenContrail relevant container images:  
