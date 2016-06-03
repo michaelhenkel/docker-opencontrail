@@ -66,7 +66,7 @@ Docker allows to apply arbitray labels to images as some sort of metadata which
 makes it easy to use the above structure to identify container groupings.  
 
 # Architecture    
-
+```
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+    
 |                                                                                                                                                                                                                    |    
 |                                                                                                                                                                            +-------------+                         |    
@@ -108,6 +108,7 @@ makes it easy to use the above structure to identify container groupings.
 |                                                                                          +----------------------------------------------------------------------------------------------+                          |    
 |                                                                                          | eth0 10.0.0.1 |                                                                                                         |    
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+    
+```
 
 
 This label filter shows all OpenContrail relevant container images:  
