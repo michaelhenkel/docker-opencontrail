@@ -45,17 +45,18 @@ if [ -n "$REDIS_SERVER" ]; then
 fi
 
 if [ -n "$IFMAP_SERVER" ]; then
+    myip=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
     ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS ifmap_password api-server
     ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS ifmap_username api-server
-    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS ifmap_server_ip $IFMAP_SERVER
+    ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS ifmap_server_ip $myip
 fi
-if [ -n "$IFMAP_USER" ]; then
-    IFS=',' read -ra NODE <<< "$IFMAP_USER"
-    for i in "${NODE[@]}";do
-        echo $i:$i >> /etc/ifmap-server/basicauthusers.properties
-        echo $i.dns:$i.dns >> /etc/ifmap-server/basicauthusers.properties
-    done
-fi
+#if [ -n "$IFMAP_USER" ]; then
+#    IFS=',' read -ra NODE <<< "$IFMAP_USER"
+#    for i in "${NODE[@]}";do
+#        echo $i:$i >> /etc/ifmap-server/basicauthusers.properties
+#        echo $i.dns:$i.dns >> /etc/ifmap-server/basicauthusers.properties
+#    done
+#fi
 
 if [ -n "$ZOOKEEPER_SERVER" ]; then
     IFS=',' read -ra NODE <<< "$ZOOKEEPER_SERVER"

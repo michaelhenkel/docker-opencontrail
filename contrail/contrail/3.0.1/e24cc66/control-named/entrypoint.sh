@@ -15,7 +15,8 @@ if [ -n "$KEYSTONE_SERVER" ]; then
   ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE insecure false
   ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE memcache_servers $MEMCACHED_SERVER:11211
 fi
-myip=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+myip_ext=`ifconfig $INTERFACE_EXT | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+myip_int=`ifconfig $INTERFACE_INT | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
 sed -i 's/secret123/sHE1SM8nsySdgsoRxwARtA==/g' /etc/contrail/dns/contrail-named.conf
 sed -i "s/allow { 127.0.0.1; }/allow { $myip; }/g" /etc/contrail/dns/contrail-named.conf
 sed -i "s/inet 127.0.0.1/inet $myip/g" /etc/contrail/dns/contrail-named.conf
@@ -23,13 +24,13 @@ touch /etc/contrail/contrail-dns.conf
 echo "[DEFAULT]" > /etc/contrail/contrail-dns.conf
 echo "[DISCOVERY]" >> /etc/contrail/contrail-dns.conf
 echo "[IFMAP]" >> /etc/contrail/contrail-dns.conf
-./openstack-config --set /etc/contrail/contrail-dns.conf DEFAULT hostip $myip
+./openstack-config --set /etc/contrail/contrail-dns.conf DEFAULT hostip $myip_ext
 if [ -n "$DISCOVERY_SERVER" ]; then
     ./openstack-config --set /etc/contrail/contrail-dns.conf DISCOVERY server $DISCOVERY_SERVER
 fi
-if [ -n "$IFMAP_SERVER" ]; then
-    ./openstack-config --set /etc/contrail/contrail-dns.conf IFMAP server_url https://$IFMAP_SERVER:8443
-fi
+#if [ -n "$IFMAP_SERVER" ]; then
+#    ./openstack-config --set /etc/contrail/contrail-dns.conf IFMAP server_url https://$IFMAP_SERVER:8443
+#fi
 if [ -n "$IFMAP_USER" ]; then
     ./openstack-config --set /etc/contrail/contrail-dns.conf IFMAP user $IFMAP_USER.dns
 fi

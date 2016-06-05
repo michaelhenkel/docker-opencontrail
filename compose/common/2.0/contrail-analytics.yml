@@ -1,8 +1,9 @@
 version: '2'
 networks:
-  default:
-    external:
-      name: undercloud
+  undercloud:
+    external: true
+  ext:
+    external: true
 services:
   analytics:
     image: michaelhenkel/network:1.0
@@ -14,6 +15,9 @@ services:
     - 8089:8089
     - 5920:5920
     - 5921:5921
+    networks:
+      - ext
+      - undercloud
   analytics-alarm:
     image: michaelhenkel/analytics-alarm:3.0.1-e24cc66
     network_mode: "service:analytics"

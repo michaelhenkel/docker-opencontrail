@@ -5,7 +5,7 @@ networks:
   ext:
     external: true
 services:
-  control:
+  control_2:
     image: michaelhenkel/network:1.0
     ports:
       - 53:53
@@ -19,23 +19,23 @@ services:
     networks:
       - ext
       - undercloud
-  control-control:
+  control-control_2:
     environment:
-      - IFMAP_USER=ctrl
-      - IFMAP_PASSWORD=ctrl
+      - IFMAP_USER=ctrl2
+      - IFMAP_PASSWORD=ctrl2
     image: michaelhenkel/control-control:3.0.1-e24cc66
-    network_mode: "service:control"
+    network_mode: "service:control_2"
     env_file: common.env
     depends_on:
-      - control
-  control-named:
+      - control_2
+  control-named_2:
     environment:
-      - IFMAP_USER=ctrl
-      - IFMAP_PASSWORD=ctrl
+      - IFMAP_USER=ctrl2
+      - IFMAP_PASSWORD=ctrl2
     pid: host
     privileged: true
     image: michaelhenkel/control-named:3.0.1-e24cc66
-    network_mode: "service:control"
+    network_mode: "service:control_2"
     env_file: common.env
     depends_on:
-      - control
+      - control_2
