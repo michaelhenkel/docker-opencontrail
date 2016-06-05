@@ -43,6 +43,8 @@ services:
     env_file: common.env
     ports:
       - 9696:9696
+    depends_on:
+      - mariadb
   cassandra:
     image: michaelhenkel/cassandra:1.0
     ports:
