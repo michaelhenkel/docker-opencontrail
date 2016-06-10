@@ -268,31 +268,64 @@ This list also includes container images not needed for OpenContrail (mariadb, h
 
 # System prepartion
 
+mkdir -p /etc/consul.d
+mkdir -p /var/lib/consul
+cat << EOF > /etc/init/consul.conf
+description "Consul agent"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+
+script
+  if [ -f "/etc/service/consul" ]; then
+    . /etc/service/consul
+  fi
+
+  # Make sure to use all our CPUs, because Consul can block a scheduler thread
+  export GOMAXPROCS=`nproc`
+
+  # Get the public IP
+
+  exec /usr/local/bin/consul agent \
+    -config-dir="/etc/consul.d" \
+    -bind="0.0.0.0" \
+    -client="0.0.0.0" \
+    ${CONSUL_FLAGS} \
+    >>/var/log/consul.log 2>&1
+end script
+EOF
+
+cat << EOF > /etc/consul.d/common.json
+{
+    "data_dir": "/var/lib/consul",
+    "enable_debug": true,
+    "log_level": "info",
+    "advertise_addr": "10.87.64.34",
+    "bootstrap": true,
+    "server": true
+}
+EOF
+wget https://releases.hashicorp.com/consul/0.6.4/consul_0.6.4_linux_amd64.zip
+unzip consul_0.6.4_linux_amd64.zip -d /usr/local/bin/
+service consul start
 curl -sSL https://experimental.docker.com/ | sh
 curl -L https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-apt-get install -y zookeeper zookeeperd
-
-```
-cat /etc/default/docker
-# Docker Upstart and SysVinit configuration file
-
-#
-# THIS FILE DOES NOT APPLY TO SYSTEMD
-#
-#   Please see the documentation for "systemd drop-ins":
-#   https://docs.docker.com/engine/articles/systemd/
-#
-
-# Customize location of Docker binary (especially for development testing).
-#DOCKERD="/usr/local/bin/dockerd"
-
-# Use DOCKER_OPTS to modify the daemon startup options.
-#DOCKER_OPTS="--dns 8.8.8.8 --dns 8.8.4.4"
-DOCKER_OPTS="--cluster-store=zk://10.87.64.34:2191 --cluster-advertise=l3:2376"
-
-# If you need Docker to use an HTTP proxy, it can also be specified here.
-#export http_proxy="http://127.0.0.1:3128/"
-
-# This is also a handy place to tweak where Docker's temporary files go.
-#export TMPDIR="/mnt/bigdrive/docker-tmp"
-```
+INTERFACE=l3vm
+EXT_RANGE=192.168.1.200/28
+IP=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+SUBNET=`ip r sh |grep "$INTERFACE  proto" |grep -v default |awk '{print $1}'`
+GW=192.168.1.1
+echo DOCKER_OPTS=\"--cluster-store=consul://$IP:8500 --cluster-advertise=$INTERFACE:2376\" >> /etc/default/docker
+service docker restart
+docker network create -d overlay undercloud
+docker network create -d macvlan --subnet $SUBNET --ip-range $EXT_RANGE --gateway $GW -o parent=$INTERFACE ext
+cd docker-opencontrail/compose/controller
+docker-compose up -d
+docker-compose -f glance.yml up -d
+docker-compose -f nova.yml up -d
+docker-compose -f contrail-config.yml up -d
+docker-compose -f contrail-analytics.yml up -d
+docker-compose -f contrail-control.yml up -d
+for i in `ls *.yml`; do docker-compose -f $i ps; done

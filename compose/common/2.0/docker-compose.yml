@@ -61,9 +61,9 @@ services:
      - /var/lib/cassandra/data
   zookeeper:
     image: michaelhenkel/zookeeper:1.0
-    ports:
-    - 2181:2181
-    - 33366:33366
+    #ports:
+    #- 2181:2181
+    #- 33366:33366
     env_file: common.env
     volumes:
       - /var/lib/zookeeper

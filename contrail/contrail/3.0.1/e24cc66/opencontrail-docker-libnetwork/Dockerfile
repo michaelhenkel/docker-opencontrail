@@ -6,10 +6,9 @@ RUN echo "deb http://ppa.launchpad.net/mhenkel-3/opencontrail/ubuntu trusty main
 RUN echo "deb http://ppa.launchpad.net/opencontrail/ppa/ubuntu trusty main" >> /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install -y --force-yes contrail-utils python-contrail python-contrail-vrouter-api \
-                                   git python-pip
+                                   git python-pip python-yaml
 RUN git clone https://github.com/michaelhenkel/opencontrail-docker-libnetwork.git /opencontrail-docker-libnetwork
 RUN pip install netaddr pyroute2 uhttplib
-RUN apt-get install -y --force-yes python-yaml
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 
