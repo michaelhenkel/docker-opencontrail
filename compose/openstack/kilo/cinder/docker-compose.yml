@@ -1,8 +1,0 @@
-cinder-api:
-  image: localhost:5100/cinder-api:contrail-3.0-2668
-  net: host
-  env_file: /etc/docker/contrail/common.env
-cinder-scheduler:
-  image: localhost:5100/cinder-scheduler:contrail-3.0-2668
-  net: host
-  env_file: /etc/docker/contrail/common.env

@@ -1,2 +1,0 @@
-Openstack horizon image
-=======================

@@ -1,8 +1,0 @@
-webui-job:
-  image: michaelhenkel/webui-job:3.0-latest
-  net: host
-  env_file: /etc/docker/contrail/common.env
-webui-server:
-  image: michaelhenkel/webui-server:3.0-latest
-  net: host
-  env_file: /etc/docker/contrail/common.env

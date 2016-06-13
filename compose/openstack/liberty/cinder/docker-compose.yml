@@ -1,8 +1,0 @@
-cinder-api:
-  image: michaelhenkel/cinder-api:liberty
-  net: host
-  env_file: /etc/docker/contrail/common.env
-cinder-scheduler:
-  image: michaelhenkel/cinder-scheduler:liberty
-  net: host
-  env_file: /etc/docker/contrail/common.env

@@ -1,8 +1,0 @@
-glance-api:
-  image: michaelhenkel/glance-api:liberty
-  net: host
-  env_file: /etc/docker/contrail/common.env
-glance-registry:
-  image: michaelhenkel/glance-registry:liberty
-  net: host
-  env_file: /etc/docker/contrail/common.env
