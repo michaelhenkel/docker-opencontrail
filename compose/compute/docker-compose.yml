@@ -1,0 +1,44 @@
+version: '2'
+services:
+  oc:
+    image: michaelhenkel/opencontrail-docker-libnetwork:3.0.1-e24cc66
+    network_mode: "host"
+    env_file: common.env
+    volumes:
+      - /run/docker/plugins:/run/docker/plugins
+    cap_add:
+      - NET_ADMIN
+#  libvirt:
+#    image: michaelhenkel/libvirt:1.0
+#    privileged: true
+#    volumes:
+#      - /var/lib/nova/instances:/var/lib/nova/instances
+#      - /lib/modules:/lib/modules
+#      - /var/lib/libvirt/:/var/lib/libvirt
+#      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+#    network_mode: "host"
+#    env_file: common.env
+  vrouter:
+    image: michaelhenkel/vrouter-agent:3.0.1-e24cc66
+    privileged: true
+    network_mode: "host"
+    env_file: common.env
+    environment:
+      - SERVICE_NAME=vrouter
+    ports:
+      - 8097:8097
+      - 9090:9090
+      - 9091:9091
+      - 8085:8085
+    volumes:
+      - /etc/redhat-release:/etc/redhat-release
+      - /usr/src/linux-headers-3.19.0-59-generic:/usr/src/linux-headers-3.19.0-59-generic
+      - /usr/src/linux-headers-3.19.0-59:/usr/src/linux-headers-3.19.0-59
+      - /lib/modules:/lib/modules
+#  nova-compute:
+#    image: michaelhenkel/nova-compute:liberty
+#    privileged: true
+#    volumes:
+#      - /var/lib/nova/instances:/var/lib/nova/instances
+#    network_mode: "host"
+#    env_file: common.env

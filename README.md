@@ -268,8 +268,10 @@ This list also includes container images not needed for OpenContrail (mariadb, h
 
 # Quick Start (change INTERFACE, EXT_RANGE and GW)
 
+Controller Node:    
+
 ```
-apt-get install -y zookeeper zookeeperd
+apt-get install -y zookeeper zookeeperd git
 service zookeeper start
 curl -sSL https://experimental.docker.com/ | sh
 curl -L https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
@@ -283,10 +285,26 @@ echo DOCKER_OPTS=\"--cluster-store=zk://$IP:2181 --cluster-advertise=$INTERFACE:
 service docker restart
 docker network create -d overlay internal
 docker network create -d macvlan --subnet $SUBNET --ip-range $EXT_RANGE --gateway $GW -o parent=$INTERFACE ext
+git clone https://github.com/michaelhenkel/docker-opencontrail
 cd docker-opencontrail/compose/contrail
 docker-compose up -d
 docker-compose -f contrail-config.yml up -d
 docker-compose -f contrail-analytics.yml up -d
 docker-compose -f contrail-control.yml up -d
+docker-compose -f glance.yml up -d
+docker-compose -f nova.yml up -d
 for i in `ls *.yml`; do docker-compose -f $i ps; done
+```
+
+Compute Node:    
+
+```
+apt-get install -y git
+git clone https://github.com/michaelhenkel/docker-opencontrail
+curl -sSL https://experimental.docker.com/ | sh
+curl -L https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+cd docker-opencontrail/compose/compute
+#adjust common.env
+docker-compose up -d
 ```
