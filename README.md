@@ -266,8 +266,9 @@ container directories. In this example a private repository is used
 
 This list also includes container images not needed for OpenContrail (mariadb, horizon, cinder, glance).
 
-# Quick Start
+# Quick Start (change INTERFACE, EXT_RANGE and GW)
 
+```
 apt-get install -y zookeeper zookeeperd
 service zookeeper start
 curl -sSL https://experimental.docker.com/ | sh
@@ -288,3 +289,4 @@ docker-compose -f contrail-config.yml up -d
 docker-compose -f contrail-analytics.yml up -d
 docker-compose -f contrail-control.yml up -d
 for i in `ls *.yml`; do docker-compose -f $i ps; done
+```
