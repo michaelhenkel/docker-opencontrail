@@ -166,5 +166,7 @@ ip address delete $HOST_IP/$CIDR dev $PHYSICAL_INTERFACE
 ip address add $HOST_IP/$CIDR dev vhost0
 ip link set dev vhost0 up
 ip route add default via $GATEWAY_IP
+hname=`hostname`
+/usr/share/contrail-utils/provision_vrouter.py --host_name $hname --host_ip $HOST_IP --api_server_ip $CONFIG_API_SERVER --api_server_port 8082 --oper add --admin_user $ADMIN_USER --admin_password $ADMIN_PASSWORD --admin_tenant_name $ADMIN_TENANT --openstack_ip $KEYSTONE_SERVER
 
 exec "$@"

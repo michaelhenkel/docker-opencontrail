@@ -1,0 +1,12 @@
+version: '2'
+networks:
+  default:
+    external:
+      name: internal
+services:
+  keystone:
+    image: michaelhenkel/keystone:liberty
+    env_file: common.env
+    ports:
+      - 5000:5000
+      - 35357:35357

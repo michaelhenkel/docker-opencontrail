@@ -1,0 +1,11 @@
+version: '2'
+networks:
+  default:
+    external:
+      name: internal
+services:
+  neutron-server:
+    image: michaelhenkel/neutron-server:liberty
+    env_file: common.env
+    ports:
+      - 9696:9696

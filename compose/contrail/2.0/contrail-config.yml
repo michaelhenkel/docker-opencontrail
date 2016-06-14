@@ -2,7 +2,7 @@ version: '2'
 networks:
   default:
     external:
-      name: undercloud
+      name: internal
 services:
   config:
     image: michaelhenkel/network:1.0
@@ -23,30 +23,35 @@ services:
     env_file: common.env
     depends_on:
       - config
+      - ifmap
   config-device-manager:
     image: michaelhenkel/config-device-manager:3.0.1-e24cc66
     network_mode: "service:config"
     env_file: common.env
     depends_on:
       - config
+      - config-api
   contrail-discovery:
     image: michaelhenkel/config-discovery:3.0.1-e24cc66
     network_mode: "service:config"
     env_file: common.env
     depends_on:
       - config
+      - config-api
   config-schema:
     image: michaelhenkel/config-schema:3.0.1-e24cc66
     network_mode: "service:config"
     env_file: common.env
     depends_on:
       - config
+      - config-api
   config-svc-monitor:
     image: michaelhenkel/config-svc-monitor:3.0.1-e24cc66
     network_mode: "service:config"
     env_file: common.env
     depends_on:
       - config
+      - config-api
   ifmap:
     image: michaelhenkel/ifmap:3.0.1-e24cc66
     network_mode: "service:config"

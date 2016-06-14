@@ -1,6 +1,6 @@
 version: '2'
 networks:
-  undercloud:
+  internal:
     external: true
   ext:
     external: true
@@ -17,7 +17,7 @@ services:
     - 5921:5921
     networks:
       - ext
-      - undercloud
+      - internal
   analytics-alarm:
     image: michaelhenkel/analytics-alarm:3.0.1-e24cc66
     network_mode: "service:analytics"
