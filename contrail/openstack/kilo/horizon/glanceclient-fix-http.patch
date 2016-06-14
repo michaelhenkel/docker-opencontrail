@@ -1,0 +1,11 @@
+--- http.py.orig	2015-07-10 05:40:57.481565335 +0000
++++ http.py	2015-07-10 05:41:13.845642342 +0000
+@@ -168,6 +168,8 @@
+             chunk = body
+             while chunk:
+                 chunk = body.read(CHUNKSIZE)
++                if chunk == '':
++                    break
+                 yield chunk
+ 
+         data = kwargs.pop("data", None)
