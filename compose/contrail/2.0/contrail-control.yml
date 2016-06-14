@@ -1,0 +1,41 @@
+version: '2'
+networks:
+  undercloud:
+    external: true
+  ext:
+    external: true
+services:
+  control:
+    image: michaelhenkel/network:1.0
+    ports:
+      - 53:53
+      - 53:53/udp
+      - 179:179
+      - 5269:5269
+      - 8083:8083
+      - 8092:8092
+      - 8093:8093
+      - 8094:8094
+    networks:
+      - ext
+      - undercloud
+  control-control:
+    environment:
+      - IFMAP_USER=ctrl
+      - IFMAP_PASSWORD=ctrl
+    image: michaelhenkel/control-control:3.0.1-e24cc66
+    network_mode: "service:control"
+    env_file: common.env
+    depends_on:
+      - control
+  control-named:
+    environment:
+      - IFMAP_USER=ctrl
+      - IFMAP_PASSWORD=ctrl
+    pid: host
+    privileged: true
+    image: michaelhenkel/control-named:3.0.1-e24cc66
+    network_mode: "service:control"
+    env_file: common.env
+    depends_on:
+      - control
