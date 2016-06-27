@@ -1,8 +1,9 @@
 version: '2'
 networks:
-  default:
-    external:
-      name: internal
+  internal:
+    external: true
+  ext:
+    external: true
 services:
   config:
     image: michaelhenkel/network:1.0
@@ -17,6 +18,9 @@ services:
     - 5998:5998
     - 8087:8087
     - 8088:8088
+    networks:
+      - ext
+      - internal
   config-api:
     image: michaelhenkel/config-api:3.0.1-e24cc66
     network_mode: "service:config"

@@ -1,0 +1,10 @@
+version: '2'
+services:
+  contrail-libnetwork:
+    image: michaelhenkel/opencontrail-docker-libnetwork:3.0.1-e24cc66
+    network_mode: "host"
+    env_file: common-docker-libnetwork.env
+    volumes:
+      - /run/docker/plugins:/run/docker/plugins
+    cap_add:
+      - NET_ADMIN

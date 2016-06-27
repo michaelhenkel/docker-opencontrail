@@ -19,6 +19,9 @@ if [ -n "$KEYSTONE_SERVER" ]; then
   ./openstack-config --set /etc/contrail/contrail-keystone-auth.conf KEYSTONE memcache_servers $MEMCACHED_SERVER:11211
 fi
 
+myip=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+myip_int=`ifconfig $INTERFACE_INT | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+
 if [ -n "$CASSANDRA_SERVER" ]; then
     IFS=',' read -ra NODE <<< "$CASSANDRA_SERVER"
     CASSANDRA_SERVER_LIST=""
@@ -70,5 +73,7 @@ if [ -n "$ZOOKEEPER_SERVER" ]; then
     done
     ./openstack-config --set /etc/contrail/contrail-api.conf DEFAULTS zk_server_ip $ZOOKEEPER_SERVER_LIST
 fi
+hname=`hostname`
+/usr/sbin/contrail-provision-config --host_name $hname --host_ip $myip_int --api_server_ip $CONFIG_API_SERVER --api_server_port 8082 --oper add --admin_user $ADMIN_USER --admin_password $ADMIN_PASSWORD --admin_tenant_name $ADMIN_TENANT
 
 exec "$@"

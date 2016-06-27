@@ -15,6 +15,7 @@ fi
 
 
 myip=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+myip_int=`ifconfig $INTERFACE_INT | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
 ./openstack-config --set /etc/contrail/contrail-analytics-api.conf DEFAULTS host_ip $myip
 
 if [ -n "$DISCOVERY_SERVER" ]; then
@@ -39,5 +40,7 @@ if [ -n "$CASSANDRA_SERVER" ]; then
     ./openstack-config --set /etc/contrail/contrail-analytics-api.conf DEFAULTS cassandra_server_list $CASSANDRA_SERVER_LIST
 
 fi
+hname=`hostname`
+/usr/sbin/contrail-provision-analytics --host_name $hname --host_ip $myip --api_server_ip $CONFIG_API_SERVER --api_server_port 8082 --oper add --admin_user $ADMIN_USER --admin_password $ADMIN_PASSWORD --admin_tenant_name $ADMIN_TENANT
 
 exec "$@"

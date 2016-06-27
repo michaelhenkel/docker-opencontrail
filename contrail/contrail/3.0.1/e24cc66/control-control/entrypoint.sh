@@ -34,7 +34,7 @@ fi
 #    ./openstack-config --set /etc/contrail/contrail-control.conf IFMAP server_url https://$IFMAP_SERVER:8443
 #fi
 hname=`hostname`
-myip=`ifconfig $INTERFACE_INT | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+myip_int=`ifconfig $INTERFACE_INT | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
 /usr/sbin/contrail-provision-control --host_name $hname --host_ip $myip_ext --router_asn 64512 --api_server_ip $CONFIG_API_SERVER --api_server_port 8082 --oper add --admin_user $ADMIN_USER --admin_password $ADMIN_PASSWORD --admin_tenant_name $ADMIN_TENANT
 
 exec "$@"
