@@ -1,0 +1,64 @@
+version: '2'
+networks:
+  internal:
+    external: true
+  ext:
+    external: true
+services:
+  config:
+    image: michaelhenkel/network:1.0
+    ports:
+    - 8082:8082
+    - 8084:8084
+    - 8095:8095
+    - 8096:8096
+    - 8443:8443
+    - 8444:8444
+    - 5997:5997
+    - 5998:5998
+    - 8087:8087
+    - 8088:8088
+    networks:
+      - ext
+      - internal
+  config-api:
+    image: michaelhenkel/config-api:3.0.2-09e5d48
+    network_mode: "service:config"
+    env_file: common.env
+    depends_on:
+      - config
+      - ifmap
+  config-device-manager:
+    image: michaelhenkel/config-device-manager:3.0.2-09e5d48
+    network_mode: "service:config"
+    env_file: common.env
+    depends_on:
+      - config
+      - config-api
+  contrail-discovery:
+    image: michaelhenkel/config-discovery:3.0.2-09e5d48
+    network_mode: "service:config"
+    env_file: common.env
+    depends_on:
+      - config
+      - config-api
+  config-schema:
+    image: michaelhenkel/config-schema:3.0.2-09e5d48
+    network_mode: "service:config"
+    env_file: common.env
+    depends_on:
+      - config
+      - config-api
+  config-svc-monitor:
+    image: michaelhenkel/config-svc-monitor:3.0.2-09e5d48
+    network_mode: "service:config"
+    env_file: common.env
+    depends_on:
+      - config
+      - config-api
+  ifmap:
+    image: michaelhenkel/ifmap:3.0.2-09e5d48
+    network_mode: "service:config"
+    env_file: common.env
+    depends_on:
+      - config

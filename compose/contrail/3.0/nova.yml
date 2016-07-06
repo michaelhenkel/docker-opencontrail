@@ -1,0 +1,61 @@
+version: '2'
+networks:
+  default:
+    external:
+      name: internal
+services:
+  nova:
+    image: michaelhenkel/network:1.0
+    ports:
+      - 8773:8773
+      - 8774:8774
+      - 8775:8775
+  nova-api:
+    image: michaelhenkel/nova-api:liberty
+    network_mode: "service:nova"
+    cap_add:
+    - NET_ADMIN
+    env_file: common.env
+    depends_on:
+      - nova
+    restart: always
+  nova-cert:
+    image: michaelhenkel/nova-cert:liberty
+    network_mode: "service:nova"
+    env_file: common.env
+    depends_on:
+      - nova
+      - nova-api
+    restart: always
+  nova-conductor:
+    image: michaelhenkel/nova-conductor:liberty
+    network_mode: "service:nova"
+    env_file: common.env
+    depends_on:
+      - nova
+      - nova-api
+    restart: always
+  nova-consoleauth:
+    image: michaelhenkel/nova-consoleauth:liberty
+    network_mode: "service:nova"
+    env_file: common.env
+    depends_on:
+      - nova
+      - nova-api
+    restart: always
+  nova-novncproxy:
+    image: michaelhenkel/nova-novncproxy:liberty
+    network_mode: "service:nova"
+    env_file: common.env
+    depends_on:
+      - nova
+      - nova-api
+    restart: always
+  nova-scheduler:
+    image: michaelhenkel/nova-scheduler:liberty
+    network_mode: "service:nova"
+    env_file: common.env
+    depends_on:
+      - nova
+      - nova-api
+    restart: always

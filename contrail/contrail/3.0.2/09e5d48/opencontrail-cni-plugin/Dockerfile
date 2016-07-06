@@ -8,5 +8,5 @@ RUN go get github.com/michaelhenkel/opencontrail-cni-plugin/opencontrail
 #RUN go get github.com/pborman/uuid
 RUN mkdir -p /etc/cni/net.d
 COPY entrypoint.sh /
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["$GOPATH/bin/opencontrail"]
+#ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/go/bin/opencontrail"]

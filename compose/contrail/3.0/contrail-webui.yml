@@ -1,0 +1,21 @@
+version: '2'
+networks:
+#  default:
+#    external:
+#      name: internal
+  internal:
+    external: true
+  ext:
+    external: true
+services:
+  webui-server:
+    image: michaelhenkel/webui-server:3.0.2-09e5d48
+    networks:
+    - internal
+    - ext
+    ports:
+    - 8143:8143
+    - 8080:8080
+    - 3000:3000
+    - 3002:3002
+    env_file: common.env

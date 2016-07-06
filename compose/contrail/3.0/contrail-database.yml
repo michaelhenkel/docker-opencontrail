@@ -1,0 +1,44 @@
+version: '2'
+networks:
+  default:
+    external:
+      name: internal
+services:
+  cassandra:
+    image: michaelhenkel/cassandra:1.0
+    env_file: common.env
+    environment:
+    - CASSANDRA_LISTEN_ADDRESS=cassandra
+    volumes:
+     - /var/lib/cassandra/data
+  zookeeper:
+    image: michaelhenkel/zookeeper:1.0
+    env_file: common.env
+    volumes:
+      - /var/lib/zookeeper
+  redis:
+    image: michaelhenkel/redis:1.0
+    env_file: common.env
+  rabbitmq:
+    image: rabbitmq:latest
+    env_file: common.env
+    environment:
+      - RABBITMQ_NODE_IP_ADDRESS=0.0.0.0
+    ports:
+      - 4369:4369
+      - 5671:5671
+      - 5672:5672
+      - 25672:25672
+  memcached:
+    image: michaelhenkel/memcached:1.0
+    env_file: common.env
+    ports:
+      - 12111:12111
+  mariadb:
+    volumes:
+      - /var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    image: michaelhenkel/mariadb:1.0
+    env_file: common.env
+    ports:
+      - 3306:3306

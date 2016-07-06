@@ -41,6 +41,7 @@ RUN apt-get -qqy update && apt-get install -y --no-install-recommends \
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6839FE77
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4865D83
 RUN echo "deb http://ppa.launchpad.net/mhenkel-3/opencontrail/ubuntu trusty main" >> /etc/apt/sources.list
+RUN echo "deb http://10.87.64.33/contrail/ amd64/" >> /etc/apt/sources.list
 RUN echo "deb http://ppa.launchpad.net/opencontrail/ppa/ubuntu trusty main" >> /etc/apt/sources.list
 RUN apt-get -qqy update && apt-get install -y --force-yes --no-install-recommends \
   python-contrail \
