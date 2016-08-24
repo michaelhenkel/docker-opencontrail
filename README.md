@@ -286,11 +286,12 @@ service docker restart
 docker network create -d overlay internal
 docker network create -d macvlan --subnet $SUBNET --ip-range $EXT_RANGE --gateway $GW -o parent=$INTERFACE ext
 git clone https://github.com/michaelhenkel/docker-opencontrail
-cd docker-opencontrail/compose/contrail
-docker-compose up -d
+cd docker-opencontrail/compose/contrail/3.0
+docker-compose -f contrail-database.yml up -d
 docker-compose -f contrail-config.yml up -d
 docker-compose -f contrail-analytics.yml up -d
 docker-compose -f contrail-control.yml up -d
+docker-compose -f neutron.yml up -d
 docker-compose -f glance.yml up -d
 docker-compose -f nova.yml up -d
 for i in `ls *.yml`; do docker-compose -f $i ps; done
