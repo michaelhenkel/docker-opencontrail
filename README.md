@@ -288,6 +288,7 @@ docker network create -d macvlan --subnet $SUBNET --ip-range $EXT_RANGE --gatewa
 git clone https://github.com/michaelhenkel/docker-opencontrail
 cd docker-opencontrail/compose/contrail/3.0
 docker-compose -f contrail-database.yml up -d
+docker-compose -f keystone.yml up -d
 docker-compose -f contrail-config.yml up -d
 docker-compose -f contrail-analytics.yml up -d
 docker-compose -f contrail-control.yml up -d
