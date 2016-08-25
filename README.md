@@ -273,9 +273,8 @@ Controller Node:
 ```
 apt-get install -y zookeeper zookeeperd git
 service zookeeper start
-curl -sSL https://experimental.docker.com/ | sh
-curl -L https://github.com/docker/compose/releases/download/1.7.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+#install docker: https://docs.docker.com/engine/installation/linux/ (must be 1.12 or later)
+#install docker-compose: https://docs.docker.com/compose/install/
 INTERFACE=l3vm
 EXT_RANGE=192.168.1.200/28
 IP=`ifconfig $INTERFACE | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
